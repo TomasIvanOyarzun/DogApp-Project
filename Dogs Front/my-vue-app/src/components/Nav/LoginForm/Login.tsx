@@ -10,7 +10,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Box } from '@mui/system';
 import SendIcon from '@mui/icons-material/Send';
 
-
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 
@@ -26,7 +26,9 @@ import { useFetchAuthenticateUserMutation, useFetchDataUserQuery, userActive} fr
 import { useAppDispatch } from '../../../hooks/toolkitHooks';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-
+import Avatar from '@mui/material/Avatar';
+import { Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 
 interface Props {
@@ -88,15 +90,23 @@ const Login = ({openOut, setOpenOut} : Props) => {
         }
    },[data])
 
-  console.log(result)
+  
   return (
       
        <>
    
       <Dialog open={openOut} onClose={handleClose} >
         <Box display='flex' justifyContent='center'  >
-            <Box display='flex' alignItems='center' >
-            <DialogTitle  sx={{fontSize: '32px'}}>Sing Up</DialogTitle> <AccountCircleIcon fontSize='large' /> 
+            <Box display='flex' flexDirection='column' alignItems='center' >
+            <DialogTitle color='#1976d2'  sx={{fontSize: '32px'}}>Sing Up</DialogTitle> 
+            <Avatar
+            alt="Remy Sharp"
+            
+             sx={{ width: 64, height: 64 }}
+               >
+                   <AccountCircleIcon style={{width: '250px'}} fontSize='large' /> 
+                </Avatar>
+            
             </Box>
 
         </Box >
@@ -105,21 +115,21 @@ const Login = ({openOut, setOpenOut} : Props) => {
         <Box sx={{display : 'flex', justifyContent: 'center' }}>
         <DialogContent>
         
-          { result.isError ? <Alert severity="error">
+          { result.isError && <Alert variant="filled" severity="error">
   <AlertTitle>Error</AlertTitle>
-  the credentials are incorrect or do not exist — <strong>check it out!</strong>
-</Alert> : 
+  incorrect credentials or user does not exist<strong>, check it out!</strong>
+</Alert>  }
 
 <DialogContentText>
 Log in to create dog breeds and have access to more content on the page.
 </DialogContentText>
-}
+
        
 
-          <form onSubmit={handleOnsubmit}>
-         <Box sx={{width: '100%', height:'200px', display : 'flex', flexDirection: 'column', justifyContent: 'space-around'}}>
+          <form style={{width: '100%', height:'200px', display : 'flex', flexDirection: 'column', justifyContent: 'space-around', alignItems: 'center' }} onSubmit={handleOnsubmit}>
+         <Box sx={{width: '80%', height:'200px', display : 'flex', flexDirection: 'column', justifyContent: 'space-around', alignItems: 'center'}}>
           
-          <FormControl variant="standard">
+          <FormControl variant="standard" fullWidth>
         <InputLabel >
           Email
         </InputLabel>
@@ -129,12 +139,12 @@ Log in to create dog breeds and have access to more content on the page.
           onChange={handleOnChange}
           startAdornment={
             <InputAdornment position="start">
-              <AccountCircle />
+              <MailOutlineIcon />
             </InputAdornment>
           }
         />
       </FormControl>
-      <FormControl  variant="standard">
+      <FormControl fullWidth  variant="standard">
           <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
           <Input
             name='password'
@@ -154,8 +164,8 @@ Log in to create dog breeds and have access to more content on the page.
             }
           />
         </FormControl>
-         <Box>
-         <Button type='submit' variant="contained" endIcon={<SendIcon />}>Lo gin</Button>
+         <Box width='100%'>
+         <Button fullWidth type='submit' variant="contained" endIcon={<SendIcon />}>LOGIN</Button>
 
           
           </Box>
@@ -166,10 +176,13 @@ Log in to create dog breeds and have access to more content on the page.
 
         </Box>
         <DialogActions>
+          <Box sx={{width: '100%', display: 'flex', margin: '20px', justifyContent: 'center'}} >
+            <Typography color='gray'>You do not have an account ?</Typography>
+            <Link onClick={() => setOpenOut(false)} style={{textDecoration: 'none', color: '#1976d2'}} to='/register'>Create an account</Link>
+          </Box>
          
-         
-
-         
+ 
+          
         </DialogActions>
         
         

@@ -1,13 +1,15 @@
-import {prop, getModelForClass,Ref} from '@typegoose/typegoose'
+import {prop, getModelForClass,Ref, modelOptions} from '@typegoose/typegoose'
 import { v4} from 'uuid'
 import { Dog } from './Dog'
 
-class Comment {
-    @prop()
-    texto : string
 
-    @prop({ ref : () => Dog})
-    dog : Ref<Dog>
+
+@modelOptions({ options: { disableLowerIndexes: true } })
+class Preference {
+    @prop({type : () => [String]})
+    temperaments : Array<string>
+    @prop({type : () => [String]})
+    size : Array<string>
 
 }
 export class User {
@@ -26,9 +28,9 @@ export class User {
     @prop({type: String, default: 'https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Clipart.png'}) 
     image : string
 
-    @prop({type : () => Comment}) 
+    @prop({type : () => Preference}) 
 
-    comments : Comment[]
+    preference : Preference
 
     @prop({type : Boolean, default : false})
 
@@ -39,7 +41,7 @@ export class User {
     role : String
    
     @prop({ ref : () => Dog})
-    favorite : Ref<Dog>
+    favorite : Ref<Dog>[]
     
 }
 

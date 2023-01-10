@@ -11,7 +11,7 @@ const CheckBox = () => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column'}}>
     <FormGroup>
-    <FormControlLabel checked={true} control={  <Checkbox  icon={<PetsIcon />} checkedIcon={<PetsIcon />} />} label="Ascending order" />
+    <FormControlLabel  control={  <Checkbox  icon={<PetsIcon />} checkedIcon={<PetsIcon />} />} label="Ascending order" />
     <FormControlLabel control={<Checkbox  icon={<PetsIcon />} checkedIcon={<PetsIcon />} />} label="Descending order" />
   </FormGroup>
     

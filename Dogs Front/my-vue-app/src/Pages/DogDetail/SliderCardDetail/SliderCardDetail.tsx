@@ -3,7 +3,7 @@ import Carousel from 'better-react-carousel'
 import { useFetchDogsTemperamentQuery } from '../../../feactures/dog/DogSlice'
 import CardLanding from './CardLanding'
 
-
+import Typography from '@mui/material/Typography';
 interface Props {
     temperaments : Array<string>
 }
@@ -31,8 +31,9 @@ const SliderCardDetail = ({ temperaments} : Props) => {
     },[])
     
   return (
-
-    <Carousel cols={4} rows={1} gap={10} loop >
+      <>
+        <Typography color='#666' variant="h3">Breeds with similar temperaments <strong>{temp}</strong></Typography>
+        <Carousel cols={4} rows={1} gap={10} loop >
     
     {data?.docs.map(dog => (
         <Carousel.Item>
@@ -42,6 +43,8 @@ const SliderCardDetail = ({ temperaments} : Props) => {
     
     
   </Carousel>
+      </>  
+   
   )
 }
 

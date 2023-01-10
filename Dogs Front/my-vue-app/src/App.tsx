@@ -9,12 +9,14 @@ import AlertText from './components/AlertText/AlertText'
 import { useAppSelector } from './hooks/toolkitHooks'
 import Footer from './components/Footer/Footer'
 import Register from './Pages/register/Register'
+import Profile from './Pages/Profile/Profile'
+import Main from './Pages/Profile/Main/Main'
 function App() {
   const active = useAppSelector(state => state.user.active)
   
   return (
 
-   <div style={{width: '100%' , background: '#ebebeb'}}>
+   <div style={{width: '100%'}}>
       <Nav/>
       {localStorage.getItem("user") && active && <AlertText msg='You have successfully logged in'  />}
       <Box  >
@@ -23,6 +25,12 @@ function App() {
           <Route path='/dog/:id' element={<DogDetail/>} />
           <Route path='/' element={<Inicio/>} />
           <Route path='/register' element={<Register/>} />
+           
+          <Route  path='profile' element={<Profile/>}>
+         
+          <Route path='' element={<Main/>} />
+          </Route>
+
         </Routes>
       </Box>
       <Footer/>

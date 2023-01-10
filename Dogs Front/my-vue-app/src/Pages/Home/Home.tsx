@@ -8,19 +8,21 @@ import {Grid} from "@mui/material"
 import BreadcumbsHome from './BreadcumbsHome';
 import { useAppSelector } from '../../hooks/toolkitHooks';
 import { Container } from '@mui/system';
+import { Box } from '@mui/material';
 const Home = () => {
-  const page = useAppSelector(state => state.page)
+  const page = useAppSelector(state => state.dogReducer.fetchDog)
     const {data} = useFetchDogsQuery(page)
   return (
+    <Box width='100%' sx={{backgroundColor: '#FFFF'}} >
      <Container>
       <Stack p={2}><BreadcumbsHome/></Stack>
     
     <Stack direction="row" spacing={2} >
       <Grid container>
-         <Grid xs={3}>
+         <Grid xs={12} md={3} lg={3}>
             <Filter /> 
           </Grid>
-          <Grid xs={9} >
+          <Grid xs={12}  md={9} lg={9}>
             <CardsDog/>
            </Grid> 
       </Grid>
@@ -28,6 +30,7 @@ const Home = () => {
     {data?.docs && <MyPagination/>}
 
     </Container>
+    </Box>
   )
 }
 

@@ -16,6 +16,8 @@ interface Props {
 
 
 const CardLanding = ({dog, temp} : Props) => {
+
+
   return (
     <Card sx={{ maxWidth: 345 , height: '95%' }}>
     <CardActionArea>
@@ -33,7 +35,7 @@ const CardLanding = ({dog, temp} : Props) => {
         <Box display='flex' flexWrap='wrap' justifyContent='space-evenly'>
        
       {dog.temperament.map((el,index) => (
-        <Chip color='info' key={index} label={el} sx={{marginBottom: '3px'}}  />
+        <Chip key={index} label={el} sx={{marginBottom: '3px', }} style={{backgroundColor : el === temp ? 'orange' : '#ECEBEB'}}  />
 
       ))}
       

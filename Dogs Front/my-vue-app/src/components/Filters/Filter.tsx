@@ -6,17 +6,17 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { useAppDispatch } from '../../hooks/toolkitHooks';
+import { useAppDispatch, useAppSelector } from '../../hooks/toolkitHooks';
 import Temperament from './Temperament/Temperament';
 import SizeDogHeigth from './SizeDog/SizeDogHeight';
 import SizeDogWeight from './SizeDog/SizeDogWeight';
 import CheckBox from './CheckBoxOrder/CheckBox';
 
 const Filter = () => {
-    
-    
+     const options = useAppSelector(state => state.dogReducer.fetchDog)
+     console.log(options)
   return (
-    <Box display='flex' flexDirection='column' p={2} bgcolor='#f7f7f7' marginTop={4} marginLeft={4}  >
+    <Box display='flex' flexDirection='column' p={2} bgcolor='#fff'  border='1px solid #10C408' borderRadius='4px'  >
         
        <Typography gutterBottom variant="h5" component="div">
        filters and sorts

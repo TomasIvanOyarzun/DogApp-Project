@@ -6,8 +6,10 @@ export interface getUserData {
         _id: string
         userName: string
         email: string
-        rol: string
-        confirmed: boolean
+        image? : string
+        favorite? : string[]
+        role: string
+        email_confirmed : boolean
       
 }
 interface Register {
@@ -72,6 +74,31 @@ export interface updatingComment {
     exits: boolean;
 }
 
+interface registerUser {
+    error : boolean,
+    msg : string
+}
+
+
+interface userPost {
+    name : string ,
+    password : string,
+    confirmPassword : string    
+    email : string,
+    temperaments? : string[],
+    size? : string[]
+
+}
+
+interface userCommentId {
+    _id: string,
+    dog: string,
+    comment: string,
+    user: string,
+    like: number,
+    exits: boolean,
+    __v: number
+}
 
 const UserQuery = DogSlice.injectEndpoints({
     
@@ -91,7 +118,7 @@ const UserQuery = DogSlice.injectEndpoints({
         ),
 
        
-        fetchAuthenticateUser : builder.mutation<responseLogin , login >({
+        fetchAuthenticateUser : builder.mutation<responseLogin, login >({
 
             
             query : (data) => ({
@@ -110,7 +137,8 @@ const UserQuery = DogSlice.injectEndpoints({
                  url : '/user',
                  headers : {Bearer: token}
                }
-            }
+            } ,
+            providesTags : ['User']
         }),
 
         fetchComments : builder.query<updatingComment[] , string | undefined>({
@@ -140,6 +168,32 @@ const UserQuery = DogSlice.injectEndpoints({
                 body : data
                 }),
                 invalidatesTags : ['Comment']
+        }),
+
+        fetchRegister : builder.mutation<registerUser, userPost>({
+           query : (data) => ({
+            url : `/user`,
+            method : 'POST',
+            body : data
+           })
+        }),
+
+        fetchUpdateUser : builder.mutation<getUserData , getUserData>({
+            query : (data) => ({
+                url : `/user`,
+                method : 'PUT',
+                body : data
+            }),
+            invalidatesTags : ['User', 'Favorite']
+        }),
+
+        fetchFavoriteUser : builder.query<string[], string>({
+            query : (id) => `/favorite/${id}` ,
+            providesTags : ['Favorite']
+        }),
+
+        fetchCommentId : builder.query<userCommentId[] | [] , string>({
+            query : (id) => `/comment/${id}`
         })
         
 
@@ -148,16 +202,22 @@ const UserQuery = DogSlice.injectEndpoints({
 })
 
 const initialState = {
-    active : false
+    active : false,
+
+   
 }
+
+
 const UserSlice = createSlice({
     name : 'user',
-    initialState,
+    initialState ,
+    
     reducers : {
     
         userActive : (state, action : PayloadAction<boolean>) => {
            state.active = action.payload
         }
+        
 
        
     }
@@ -168,7 +228,12 @@ export const {useFetchRegisterUserMutation,
       useFetchCommentsQuery, 
       useFetchAllUserQuery,
        useFetchPostCommentMutation,
-    useFetchUpdateCommentMutation} = UserQuery
+    useFetchUpdateCommentMutation,
+    useFetchRegisterMutation,
+    useFetchUpdateUserMutation,
+    useFetchFavoriteUserQuery,
+    useFetchCommentIdQuery
+} = UserQuery
 
 
 export default UserSlice.reducer

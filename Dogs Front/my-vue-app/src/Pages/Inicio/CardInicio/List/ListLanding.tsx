@@ -14,7 +14,7 @@ import WhatshotIcon from '@mui/icons-material/Whatshot';
 const ListLanding = () => {
   return (
     <List sx={{ width: '100%', maxWidth: 360 }}>
-    <ListItem>
+    <ListItem >
       <ListItemAvatar>
         <Avatar>
           <PetsIcon/>

@@ -61,3 +61,23 @@ export const getAllComment = async (req: Request, res: Response , next : NextFun
         next(error)
     }
   }
+
+
+  export const getCommentId = async (req: Request, res: Response , next : NextFunction) => {
+
+    const {id} = req.params
+   
+  try {
+  
+   
+   
+     const user = await CommentModel.find({user : id , exits : true})
+      
+  
+     res.status(200).json(user)
+  } catch (error) {
+  
+   next(error)
+   
+  }
+  }

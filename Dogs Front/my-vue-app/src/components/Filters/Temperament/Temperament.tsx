@@ -1,6 +1,6 @@
 import React from 'react'
-import { increment, temperamentSelect} from '../../../feactures/dog/DogSlice';
-import { useAppDispatch } from '../../../hooks/toolkitHooks';
+import { filterOptions, increment, temperamentSelect} from '../../../feactures/dog/DogSlice';
+import { useAppDispatch, useAppSelector } from '../../../hooks/toolkitHooks';
 import {  useFetchTemperamentsQuery } from '../../../feactures/dog/DogSlice'
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -10,12 +10,17 @@ import { Box } from '@mui/system'
 import { Divider, Grid, Typography } from '@mui/material'
 
 
+
 const Temperament = () => {
     const [temperament, setTemperament] = React.useState('');
     const dispatch = useAppDispatch()
+    const options = useAppSelector(state => state.dogReducer.fetchDog)
     const handleChange = (event: SelectChangeEvent) => {
       setTemperament(event.target.value as string);
-        dispatch(temperamentSelect(event.target.value))
+        dispatch(filterOptions({
+              ...options,
+              temperament : event.target.value
+        }))
         dispatch(increment(1))
     };
     const {data} = useFetchTemperamentsQuery('')

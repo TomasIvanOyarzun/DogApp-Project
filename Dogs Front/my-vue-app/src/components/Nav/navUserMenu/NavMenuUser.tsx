@@ -13,6 +13,7 @@ import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import { getUserData, userActive } from '../../../feactures/user/UserSlice';
 import { useAppDispatch } from '../../../hooks/toolkitHooks';
+import { Link } from 'react-router-dom';
 
 
 const NavMenuUser = () => {
@@ -44,7 +45,7 @@ const NavMenuUser = () => {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32 }}>{user?.userName?.charAt(0).toLocaleUpperCase()}</Avatar>
+            <Avatar src={user?.image} sx={{ width: 32, height: 32 }}></Avatar>
           </IconButton>
         </Tooltip>
       </Box>
@@ -86,9 +87,11 @@ const NavMenuUser = () => {
         <MenuItem>
           <Avatar /> Profile
         </MenuItem>
+        <Link style={{textDecoration: 'none'}} to={`/profile`}>
         <MenuItem>
           <Avatar /> My account
         </MenuItem>
+         </Link>
         <Divider />
         <MenuItem>
           <ListItemIcon>

@@ -54,3 +54,13 @@ export interface commentPost {
   comment : string,
   user : ObjectId
 }
+
+export interface userDataPut {
+  _id : string
+  email_confirmed : boolean
+  email : string 
+  image : string
+   role : string
+   userName : string
+   favorite : string
+}

@@ -74,7 +74,7 @@ const Comment  = () => {
    
      <>  
 
-     <Box sx={{width: '100%'}}>
+     <Box sx={{width: '100%', paddingBottom: '40px'}}>
       <Typography variant="subtitle1" gutterBottom color='#1976d2'>{isError ?   0 : data?.length} comentarios</Typography>
        {localStorage.getItem('user') && <CommentLogin/>}
        {load  && isError === false && comment?.map((el,index) => (

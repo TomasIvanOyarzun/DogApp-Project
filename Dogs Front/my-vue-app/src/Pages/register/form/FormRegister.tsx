@@ -23,11 +23,13 @@ let initialState = {
   interface Props {
     error : form
     setError : React.Dispatch<React.SetStateAction<form>>
+    input : form
+    setInput : React.Dispatch<React.SetStateAction<form>>
   }
-const FormRegister = ({error, setError}: Props) => {
+const FormRegister = ({error, setError, input, setInput}: Props) => {
 
     const [showPassword, setShowPassword] = React.useState(false);
-    const [input, setInput] = React.useState<form>(initialState)
+    
     
     const handleClickShowPassword = () => setShowPassword((show) => !show);
   
@@ -68,7 +70,7 @@ const FormRegister = ({error, setError}: Props) => {
      {error.name.length > 0 && <Typography color='red'>{error.name}</Typography>}
      </FormControl>
 
-     <FormControl  sx={{ m: 1, width: '40ch' }}>
+     <FormControl  sx={{ m: 1, width : '70%' }}>
      <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
           <OutlinedInput
              error={error.password.length > 0}
@@ -93,7 +95,7 @@ const FormRegister = ({error, setError}: Props) => {
           />
           {error.password.length > 0 && <Typography color='red'>{error.password}</Typography>}
       </FormControl>
-      <FormControl  sx={{ m: 1, width: '40ch' }}>
+      <FormControl  sx={{ m: 1, width : '70%'}}>
       <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
           <OutlinedInput
              error={error.confirmPassword.length > 0}

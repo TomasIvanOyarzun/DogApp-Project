@@ -36,12 +36,12 @@ export interface DogApi {
     baseQuery : fetchBaseQuery({
         baseUrl : 'http://localhost:3001'
     }),
-    tagTypes : ['Comment'],
+    tagTypes : ['Comment', 'User','Favorite'],
     endpoints(builder) {
         return {
             fetchDogs : builder.query<requestBackDog , reducerDog>({
-                query(page) {
-                    return `/dogs?page=${page.fetchDog.page}&temperament=${page.fetchDog.temperament}`
+                query(filterOptions) {
+                    return `/dogs?page=${filterOptions.page}&temperament=${filterOptions.temperament}`
                 }
             }),
             fetchDogById : builder.query<DogApi, string | undefined>({
@@ -68,16 +68,27 @@ export interface DogApi {
  
   
    interface reducerDog  {
-     fetchDog : {
+   
       page : number,
       temperament : string
-     }
+      height : string
+      weight : string
+      order : string
    }
+
+
+
   const initialState = {
     fetchDog : {
       page : 1 ,
-      temperament : ''
+      temperament : '',
+    
+      height : '',
+      weight : '',
+      order : ''
     }
+
+
   }
   const DogSlice3 = createSlice({
     name : 'dogPage',
@@ -89,12 +100,16 @@ export interface DogApi {
 
         temperamentSelect : (state, action : PayloadAction<string>) => {
            state.fetchDog.temperament = action.payload
+        },
+         
+        filterOptions : ( state, action : PayloadAction<reducerDog>) => {
+             state.fetchDog = action.payload 
         }
 
        
     }
 })
   
-export const { increment, temperamentSelect} = DogSlice3.actions
+export const { increment, temperamentSelect, filterOptions} = DogSlice3.actions
 export default DogSlice3.reducer
   export const {useFetchDogsQuery, useFetchDogByIdQuery, useFetchTemperamentsQuery, useFetchDogsTemperamentQuery} = DogSlice

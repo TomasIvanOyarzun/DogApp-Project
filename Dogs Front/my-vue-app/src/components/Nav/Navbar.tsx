@@ -23,8 +23,14 @@ import LoginIcon from '@mui/icons-material/Login';
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import Login from './LoginForm/Login';
 import NavMenuUser from './navUserMenu/NavMenuUser';
-import { useAppSelector } from '../../hooks/toolkitHooks';
-import { useLocation } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../hooks/toolkitHooks';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+import logo from '../../images/logo.png'
+import { Container } from '@mui/system';
+import { userActive } from '../../feactures/user/UserSlice';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+
 interface Props {
   /**
    * Injected by the documentation to work in an iframe.
@@ -53,7 +59,7 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   };
 }) as typeof Chip
 const drawerWidth = 240;
-const navItems = [{name : 'Login' , component : <LoginIcon/> }, {name: 'Contact' , component: <PermContactCalendarIcon/>}];
+
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -97,42 +103,76 @@ const Search = styled('div')(({ theme }) => ({
 const Navbar = (props: Props) => {
   const activeUser = useAppSelector(state => state.user.active)
   const [openOut, setOpenOut] = React.useState(false);
-    const { window } = props;
+  const dispatch = useAppDispatch()
+
     const [mobileOpen, setMobileOpen] = React.useState(false);
      const location = useLocation()
-    
+     const navigate = useNavigate()
     const handleDrawerToggle = () => {
       setMobileOpen((prevState) => !prevState);
     };
+    const [y, setY] = React.useState(window.scrollY);
+
+    const handleNavigation = React.useCallback(
+      (e : any) => {
+        const window = e.currentTarget;
+    
+        setY(window.scrollY);
+      }, [y]
+    );
+    
+    React.useEffect(() => {
+      setY(window.scrollY);
+      
+      window.addEventListener("scroll", handleNavigation);
+    
+      return () => {
+        window.removeEventListener("scroll", handleNavigation);
+      };
+    }, [handleNavigation]);
+
+    const handleOnClicks = () => {
+      localStorage.removeItem('user')
+      dispatch(userActive(false))
+  }
+    const absolute =  location.pathname === '/' ? 'absolute' : ''
+    const bgColor =  location.pathname === '/' && y < 100 ? 'transparent' : '#fff'
    
+    const shadow =   location.pathname === '/' ? '0' : '1'
+
+    const navItems = [{ component : <Button onClick={handleOnClicks}><LoginIcon fontSize='large'  />{`Logout`}</Button> }, {name: 'Contact' , component: <Button>< PermContactCalendarIcon fontSize='large'/>{`Contact`}</Button>}, {component :<Button onClick={() => navigate('/home')}>< PetsIcon fontSize='large'/>{`Dogs`}</Button> }, {component : <Button><FavoriteBorderIcon fontSize='large'/>{`Favorites`}</Button>}];
+    const navItemsLogin = [{ component :    <Button  sx={{ color: '#fff' }} onClick={() => setOpenOut(!openOut)}> <LoginIcon fontSize='large'/>{`Login`}</Button> }, {name: 'Contact' , component: <Button>< PermContactCalendarIcon fontSize='large'/>{`Contact`}</Button>}, {component :<Button onClick={() => navigate('/home')}>< PetsIcon fontSize='large'/>{`Dogs`}</Button>}] 
+    const navItemsTrue = activeUser  || localStorage.getItem('user') ?  navItems :  navItemsLogin 
+  
     const drawer = (
-        <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-          <Typography variant="h6" sx={{ my: 2 }} >
-            DOGS
-          </Typography>
+        <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center', bgcolor:'greenyellow' }}>
+           <img src={logo} width='120px'/>
           <Divider />
           <List>
-            {navItems.map((item, index) => (
-              <ListItem key={index} disablePadding>
-                {item.component}
-                <ListItemButton sx={{ textAlign: 'center' }}>
-                  
-                  <ListItemText primary={item.name} />
-                </ListItemButton>
+            {navItemsTrue.map((item, index) => (
+              <ListItem key={index} disablePadding sx={{ display: 'flex', justifyContent: 'center' }} >
+              
+                <Box width='100%'>{item.component}</Box>
+               
               </ListItem>
             ))}
           </List>
         </Box>
       );
-      const container = window !== undefined ? () => window().document.body : undefined;
+      const handleOnClick = () => {
+        localStorage.removeItem('user')
+        dispatch(userActive(false))
+    }
+
   return (
     <>
      {openOut && <Login openOut={openOut} setOpenOut={setOpenOut}/>}
    
-    <Box sx={{ display: 'flex' }}>
+    <Box  sx={{ display: 'flex', position : absolute}}>
     <CssBaseline />
-    <AppBar component="nav" >
-      <Toolbar >
+    <AppBar component="nav" sx={{ color: '#555555',  backgroundColor: bgColor, boxShadow : shadow, transition : '0.6s ease'}} >
+      <Container>
+      <Toolbar  sx={{ display: 'flex', justifyContent: 'space-between'}}>
         <IconButton
           color="inherit"
           aria-label="open drawer"
@@ -142,15 +182,10 @@ const Navbar = (props: Props) => {
         >
           <MenuIcon />
         </IconButton>
-        <PetsIcon/>
-        <Typography
-          variant="h6"
-          component="div"
-          sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-          
-        >
-          DOGS
-        </Typography>
+        
+       <img src={logo} width='100px'/>
+       
+        
 
         { location.pathname === '/home' && 
           <Search>
@@ -167,15 +202,16 @@ const Navbar = (props: Props) => {
         
              
            
-            {localStorage.getItem('user') ? <NavMenuUser/> : 
-            <Button  sx={{ color: '#fff' }} onClick={() => setOpenOut(!openOut)}> <LoginIcon/>{`Login`}</Button> }
+            {activeUser  || localStorage.getItem('user') ? <NavMenuUser/> : 
+            <Button  sx={{ color: '#111' }} onClick={() => setOpenOut(!openOut)}> <LoginIcon/>{`Login`}</Button> }
         
         </Box>
       </Toolbar>
+      </Container>
     </AppBar>
     <Box component="nav">
       <Drawer
-        container={container}
+       
         variant="temporary"
         open={mobileOpen}
         onClose={handleDrawerToggle}

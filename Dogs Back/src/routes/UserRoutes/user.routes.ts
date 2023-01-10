@@ -1,6 +1,6 @@
 import { Router } from "express";
-import {authenticateUser, confirmUser, getAllUser, registerUser, userData} from '../../controllers/user/UserController'
-import { getAllComment } from "../../controllers/user/UserCommentController";
+import {authenticateUser, confirmUser, getAllUser, getFavoriteUser, getUpdateUser, registerUser, userData} from '../../controllers/user/UserController'
+import { getAllComment, getCommentId } from "../../controllers/user/UserCommentController";
 import { verifyToken } from "../../middleware/verifyToken";
 const router = Router()
 
@@ -11,5 +11,7 @@ router.get('/authenticate', authenticateUser)
 router.get('/user' , verifyToken , userData)
 router.get('/comments', getAllComment)
 router.get('/all/users', getAllUser)
-
+router.put('/user', getUpdateUser)
+router.get('/favorite/:id' , getFavoriteUser)
+router.get('/comment/:id' , getCommentId)
 export default router 

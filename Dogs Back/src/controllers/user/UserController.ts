@@ -1,12 +1,13 @@
-import { UserModel } from "../../models/User";
+import { User, UserModel } from "../../models/User";
 import { Request, Response, NextFunction } from "express";
-import { userRegister, emailPassword, updatePassword, commentPost } from "../../types";
+import { userRegister, emailPassword, updatePassword, commentPost, userDataPut } from "../../types";
 import bcrypt from 'bcrypt'
 import { generateJWT } from "../../helper/generateJWT";
+import { emailRegister } from "../../helper/nodeMailer/messages";
 
 export const registerUser = async (req : Request , res : Response, next : NextFunction) => {
     const  {name , email , password} : userRegister = req.body
-      
+      console.log(req.body)
     const user = await UserModel.findOne({email})
    
        if(user) {
@@ -17,12 +18,18 @@ export const registerUser = async (req : Request , res : Response, next : NextFu
         const encriptPassword = await bcrypt.hash(password, 10);
         const newUser = new UserModel({name, email, password : encriptPassword})
         await newUser.save()
-
+             const data = {
+              name : newUser.name,
+              email : newUser.email,
+              token : newUser.token
+             }
+          emailRegister(data)
         return res.status(200).json({error: true, msg : 'You have successfully registered'})
     } catch (error) {
         next(error)
     }
 }
+
 
 export const confirmUser = async (req : Request , res : Response, next : NextFunction) => {
        
@@ -119,9 +126,11 @@ export const authenticateUser = async (req : Request , res : Response, next : Ne
       const user = {
         _id: userData._id,
         userName: userData.name,
+        image : userData.image,
         email: userData.email,
-        rol: userData.role,
-        confirmed: userData.email_confirmed,
+        role : userData.role,
+        email_confirmed : userData.email_confirmed,
+        favorite : userData.favorite.map(el => el)
 
       };
       res.status(200).json(user);
@@ -144,3 +153,45 @@ export const authenticateUser = async (req : Request , res : Response, next : Ne
      
    }
  }
+
+ export const getUpdateUser = async (req: Request, res: Response , next : NextFunction) => {
+
+     const {_id , userName, favorite }   = req.body as userDataPut
+      
+  try {
+
+     
+    
+      const user = await UserModel.findByIdAndUpdate(_id , 
+        { $set: {...req.body, name : userName,  favorite } },
+        { new: true })
+       
+
+      res.status(200).json(user)
+  } catch (error) {
+
+    next(error)
+    
+  }
+}
+
+export const getFavoriteUser = async (req: Request, res: Response , next : NextFunction) => {
+
+  
+   
+try {
+
+ 
+ 
+   const user = await UserModel.findById(req.params.id)
+    
+
+   res.status(200).json(user?.favorite)
+} catch (error) {
+
+ next(error)
+ 
+}
+}
+
+

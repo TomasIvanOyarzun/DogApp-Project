@@ -4,7 +4,7 @@ import DogSlice3 from "../feactures/dog/DogSlice"
 import UserSlice from "../feactures/user/UserSlice";
  const store = configureStore({
     reducer : {
-      page :  DogSlice3,
+      dogReducer :  DogSlice3,
       user : UserSlice,
        [DogSlice.reducerPath] : DogSlice.reducer
     },

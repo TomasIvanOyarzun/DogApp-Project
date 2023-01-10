@@ -18,6 +18,11 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import {Link} from 'react-router-dom'
+import { Checkbox, FormControlLabel } from '@mui/material';
+import { getUserData, useFetchAuthenticateUserMutation, useFetchDataUserQuery, useFetchFavoriteUserQuery, useFetchUpdateUserMutation } from '../../feactures/user/UserSlice';
+import Favorite from '@mui/icons-material/Favorite';
+import { Zoom } from '@mui/material';
+
 interface Props {
   dog : DogApi
 }
@@ -39,39 +44,71 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 
 const CardDog = ({ dog } : Props) => {
-
+  const user : getUserData = JSON.parse(localStorage.getItem('user') as string)
+  const {data, isSuccess} = useFetchFavoriteUserQuery(user?._id)
   const [expanded, setExpanded] = React.useState(false);
+  const [active2, setActive2] = React.useState(false)
+  const [updateUser] = useFetchUpdateUserMutation()
+  const [active, setActive] = React.useState( isSuccess && data?.includes(dog._id))
+  console.log('soy consola', active)
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+  
+
+  const handleOnClick = (e : React.SyntheticEvent<Element, Event>) => {
+    // setActive(!active)
+    // setActive2(true)
+
+    const unicos = data?.filter((valor, indice) => {
+      return data.indexOf(valor) === indice;
+    })
+
+    const noRepeats = unicos?.every((el) => {
+      return el !== dog._id
+    })
+    
+   if(noRepeats) {
+       updateUser({...user, favorite : unicos?.concat([`${dog._id}`])})
+   } else {
+    const deletes = data?.filter(el => el !== dog._id)
+
+    updateUser({...user, favorite : deletes})
+   }
+
+
+  }
+ 
+
+  
+ 
+
   return (
     
-    <Card sx={{ maxWidth: 345 }}>
-   
+
+    
+    <Card sx={{ maxWidth: 345, width: 345 , boxShadow : 'rgba(0, 0, 0, 0.15) 0px 2px 8px'}}>
+    
     <CardMedia
       component="img"
       height="194"
       image={dog.image}
       alt={dog.name}
-    />
-    <CardContent>
-    <Typography gutterBottom variant="h5" component="div">
+      
+    /> 
+    <CardContent  sx={{ maxHeight: 75, height: 75 }}>
+    <Typography textAlign='center' fontWeight='600' gutterBottom variant="h6" component="div" color='#666'>
           {dog.name}
         </Typography>
-      <Typography variant="body2" color="text.secondary">
-        This impressive paella is a perfect party dish and a fun meal to cook
-        together with your guests. Add 1 cup of frozen peas along with the mussels,
-        if you like.
-      </Typography>
+    
     </CardContent>
     <CardActions disableSpacing>
-      <IconButton aria-label="add to favorites">
-        <FavoriteIcon />
-      </IconButton>
-      <IconButton aria-label="share">
-        <ShareIcon />
-      </IconButton>
+     
+        
+      
+     {user &&  <FormControlLabel checked={isSuccess && data.includes(dog._id)}  value={dog._id} onChange={handleOnClick} control={<Checkbox  color='success'  icon={<FavoriteIcon />} checkedIcon={<FavoriteIcon />} />} label="Favorite" />}
+    
       <ExpandMore
         expand={expanded}
         onClick={handleExpandClick}
@@ -80,10 +117,10 @@ const CardDog = ({ dog } : Props) => {
       >
        
       </ExpandMore>
-      <Link to={`/dog/${dog._id}`} >
-          <Stack direction="row" spacing={2}>
-         <Button>Show more</Button>
-           </Stack>
+      <Link style={{textDecoration: 'none'}} to={`/dog/${dog._id}`} >
+          
+         <Button   sx={{border : 'transparent' , bgcolor: 'transparent', boxShadow: 'none', color: '#5BDA93', fontWeight: 'bold'}} >Show</Button>
+          
       </Link>
     </CardActions>
     
