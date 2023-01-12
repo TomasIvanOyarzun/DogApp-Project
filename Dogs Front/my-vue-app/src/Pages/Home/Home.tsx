@@ -9,6 +9,7 @@ import BreadcumbsHome from './BreadcumbsHome';
 import { useAppSelector } from '../../hooks/toolkitHooks';
 import { Container } from '@mui/system';
 import { Box } from '@mui/material';
+import IconDog from './IconDog';
 const Home = () => {
   const page = useAppSelector(state => state.dogReducer.fetchDog)
     const {data} = useFetchDogsQuery(page)
@@ -30,6 +31,7 @@ const Home = () => {
     {data?.docs && <MyPagination/>}
 
     </Container>
+    <IconDog/>
     </Box>
   )
 }

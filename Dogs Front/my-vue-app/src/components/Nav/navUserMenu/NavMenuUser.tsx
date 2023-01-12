@@ -39,13 +39,13 @@ const NavMenuUser = () => {
         <Tooltip title={user?.userName}>
           <IconButton
             onClick={handleClick}
-            size="small"
+            size="large"
             sx={{ ml: 2 }}
             aria-controls={open ? 'account-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar src={user?.image} sx={{ width: 32, height: 32 }}></Avatar>
+            <Avatar src={user?.image} sx={{ width: 42, height: 42 }}></Avatar>
           </IconButton>
         </Tooltip>
       </Box>
@@ -84,10 +84,8 @@ const NavMenuUser = () => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem>
-          <Avatar /> Profile
-        </MenuItem>
-        <Link style={{textDecoration: 'none'}} to={`/profile`}>
+       
+        <Link style={{textDecoration: 'none', color: '#666'}} to={`/profile`}>
         <MenuItem>
           <Avatar /> My account
         </MenuItem>

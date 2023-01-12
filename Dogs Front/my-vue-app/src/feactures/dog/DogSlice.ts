@@ -2,7 +2,7 @@ import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react"
 import { createSlice , PayloadAction} from "@reduxjs/toolkit"
 
 export interface DogApi {
-    _id : string,
+    _id? : string,
     name : string
     weight : string
     height : string
@@ -25,8 +25,8 @@ export interface DogApi {
 
   }
   
-  interface Temperaments {
-    _id : number,
+  export interface Temperaments {
+    _id : string,
     name : string
   }
 
@@ -36,13 +36,14 @@ export interface DogApi {
     baseQuery : fetchBaseQuery({
         baseUrl : 'http://localhost:3001'
     }),
-    tagTypes : ['Comment', 'User','Favorite'],
+    tagTypes : ['Comment', 'User','Favorite', 'postDog'],
     endpoints(builder) {
         return {
             fetchDogs : builder.query<requestBackDog , reducerDog>({
                 query(filterOptions) {
                     return `/dogs?page=${filterOptions.page}&temperament=${filterOptions.temperament}`
-                }
+                },
+                providesTags : ['postDog']
             }),
             fetchDogById : builder.query<DogApi, string | undefined>({
                 query(id){
@@ -50,7 +51,7 @@ export interface DogApi {
                 }
             }),
 
-            fetchTemperaments : builder.query<Temperaments[], string | undefined>({
+            fetchTemperaments : builder.query<Temperaments[], string>({
               query(){
                 return `/temperaments`
               }
@@ -60,7 +61,16 @@ export interface DogApi {
                   return `/dogs?temperament=${temperament}`
               }
           }),
-
+          
+          fetchDogsPost : builder.mutation<DogApi, DogApi>({
+            query : (data) => ({
+              url : `/create/dog`,
+              method : 'POST',
+              body : data
+          }),
+          invalidatesTags : ['postDog']
+         
+          })
         
         }
     }
@@ -112,4 +122,4 @@ export interface DogApi {
   
 export const { increment, temperamentSelect, filterOptions} = DogSlice3.actions
 export default DogSlice3.reducer
-  export const {useFetchDogsQuery, useFetchDogByIdQuery, useFetchTemperamentsQuery, useFetchDogsTemperamentQuery} = DogSlice
+  export const {useFetchDogsQuery, useFetchDogByIdQuery, useFetchTemperamentsQuery, useFetchDogsTemperamentQuery, useFetchDogsPostMutation} = DogSlice

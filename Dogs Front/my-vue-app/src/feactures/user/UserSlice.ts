@@ -1,4 +1,4 @@
-import { DogSlice } from "../dog/DogSlice";
+import { DogApi, DogSlice } from "../dog/DogSlice";
 import { createSlice, PayloadAction} from "@reduxjs/toolkit";
 import { commentType } from "../../Pages/DogDetail/Comment/Comment";
 export interface getUserData {
@@ -90,9 +90,9 @@ interface userPost {
 
 }
 
-interface userCommentId {
+export interface userCommentId {
     _id: string,
-    dog: string,
+    dog: DogApi,
     comment: string,
     user: string,
     like: number,
@@ -142,7 +142,7 @@ const UserQuery = DogSlice.injectEndpoints({
         }),
 
         fetchComments : builder.query<updatingComment[] , string | undefined>({
-            query : (id) => `/comment/${id}` ,
+            query : (id) => `/comments/${id}` ,
             providesTags: ['Comment'],
             
         }),
@@ -192,8 +192,8 @@ const UserQuery = DogSlice.injectEndpoints({
             providesTags : ['Favorite']
         }),
 
-        fetchCommentId : builder.query<userCommentId[] | [] , string>({
-            query : (id) => `/comment/${id}`
+        fetchCommentId : builder.query<userCommentId[]  , string>({
+            query : (id) => `/comment/user/${id}`
         })
         
 
@@ -203,7 +203,7 @@ const UserQuery = DogSlice.injectEndpoints({
 
 const initialState = {
     active : false,
-
+    imageUrl : ''
    
 }
 
@@ -216,9 +216,13 @@ const UserSlice = createSlice({
     
         userActive : (state, action : PayloadAction<boolean>) => {
            state.active = action.payload
+        } ,
+
+        imageUrl : (state, action : PayloadAction<string>) => {
+            state.imageUrl = action.payload
         }
         
-
+   
        
     }
 })
@@ -237,4 +241,4 @@ export const {useFetchRegisterUserMutation,
 
 
 export default UserSlice.reducer
-export const {userActive} = UserSlice.actions
+export const {userActive, imageUrl} = UserSlice.actions

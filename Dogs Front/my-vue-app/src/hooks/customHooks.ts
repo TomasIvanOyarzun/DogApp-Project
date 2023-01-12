@@ -23,4 +23,26 @@ export const useWidthScreen = () => {
       return  { width , setWidth}
 }
 
+export const usePositionY = () => {
+  const [y, setY] = React.useState(window.scrollY);
 
+    const handleNavigation = React.useCallback(
+      (e : any) => {
+        const window = e.currentTarget;
+    
+        setY(window.scrollY);
+      }, [y]
+    );
+    
+    React.useEffect(() => {
+      setY(window.scrollY);
+      
+      window.addEventListener("scroll", handleNavigation);
+    
+      return () => {
+        window.removeEventListener("scroll", handleNavigation);
+      };
+    }, [handleNavigation]);
+
+    return [y, setY]
+}

@@ -98,15 +98,15 @@ const Login = ({openOut, setOpenOut} : Props) => {
       <Dialog open={openOut} onClose={handleClose} >
         <Box display='flex' justifyContent='center'  >
             <Box display='flex' flexDirection='column' alignItems='center' >
-            <DialogTitle color='#1976d2'  sx={{fontSize: '32px'}}>Sing Up</DialogTitle> 
+            
             <Avatar
             alt="Remy Sharp"
             
-             sx={{ width: 64, height: 64 }}
+             sx={{ width: 84, height: 84 , marginTop: '20px'}}
                >
-                   <AccountCircleIcon style={{width: '250px'}} fontSize='large' /> 
+                   <AccountCircleIcon style={{fontSize: '80px'}} fontSize='large' /> 
                 </Avatar>
-            
+                <DialogTitle color='#666'  sx={{fontSize: '32px', fontWeight: 'bold' }}>Sing Up</DialogTitle> 
             </Box>
 
         </Box >
@@ -115,14 +115,14 @@ const Login = ({openOut, setOpenOut} : Props) => {
         <Box sx={{display : 'flex', justifyContent: 'center' }}>
         <DialogContent>
         
-          { result.isError && <Alert variant="filled" severity="error">
+          { result.isError  ? <Alert variant="filled" severity="error">
   <AlertTitle>Error</AlertTitle>
   incorrect credentials or user does not exist<strong>, check it out!</strong>
-</Alert>  }
-
-<DialogContentText>
+</Alert> : <DialogContentText>
 Log in to create dog breeds and have access to more content on the page.
-</DialogContentText>
+</DialogContentText> }
+
+
 
        
 
@@ -130,13 +130,14 @@ Log in to create dog breeds and have access to more content on the page.
          <Box sx={{width: '80%', height:'200px', display : 'flex', flexDirection: 'column', justifyContent: 'space-around', alignItems: 'center'}}>
           
           <FormControl variant="standard" fullWidth>
-        <InputLabel >
+        <InputLabel color='success' >
           Email
         </InputLabel>
         <Input
           name='email'
           value={input.email}
           onChange={handleOnChange}
+          color="success"
           startAdornment={
             <InputAdornment position="start">
               <MailOutlineIcon />
@@ -145,12 +146,13 @@ Log in to create dog breeds and have access to more content on the page.
         />
       </FormControl>
       <FormControl fullWidth  variant="standard">
-          <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+          <InputLabel color='success' htmlFor="standard-adornment-password">Password</InputLabel>
           <Input
             name='password'
             value={input.password}
             onChange={handleOnChange}
             type={showPassword ? 'text' : 'password'}
+            color="success"
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
@@ -165,7 +167,7 @@ Log in to create dog breeds and have access to more content on the page.
           />
         </FormControl>
          <Box width='100%'>
-         <Button fullWidth type='submit' variant="contained" endIcon={<SendIcon />}>LOGIN</Button>
+         <Button  sx={{backgroundColor: '#58f09b', backgroundImage: 'linear-gradient(45deg, #58f09b 0%, #06812f 100%)', boxShadow: 'none'}} fullWidth type='submit' variant="contained" endIcon={<SendIcon />}>LOGIN</Button>
 
           
           </Box>

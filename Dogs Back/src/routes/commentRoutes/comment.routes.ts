@@ -4,7 +4,9 @@ import { getCommentByDog, postComment, updateComment } from "../../controllers/u
 
 const router = Router()
 router.post('/comment', postComment)
-router.get('/comment/:id', getCommentByDog )
+
+//router.get('/comment/user/:id', getCommentByDog2 )
 router.put('/comment/:id', updateComment)
+router.get('/comments/:id', getCommentByDog)
 
 export default router 

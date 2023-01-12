@@ -4,6 +4,7 @@ import { userRegister, emailPassword, updatePassword, commentPost, userDataPut }
 import bcrypt from 'bcrypt'
 import { generateJWT } from "../../helper/generateJWT";
 import { emailRegister } from "../../helper/nodeMailer/messages";
+import { DogModel } from "../../models/Dog";
 
 export const registerUser = async (req : Request , res : Response, next : NextFunction) => {
     const  {name , email , password} : userRegister = req.body
@@ -179,14 +180,36 @@ export const getFavoriteUser = async (req: Request, res: Response , next : NextF
 
   
    
+  try {
+  
+   
+   
+     const user = await UserModel.findById(req.params.id)
+                         
+     res.status(200).json(user?.favorite)
+  } catch (error) {
+  
+   next(error)
+   
+  }
+  }
+
+export const getFavoriteUserDogFull = async (req: Request, res: Response , next : NextFunction) => {
+
+  
+   
 try {
 
  
  
    const user = await UserModel.findById(req.params.id)
-    
+                        .sort({_id: -1})                 
+                                            
+                       
+                        .populate('favorite')
+                        .exec(); 
 
-   res.status(200).json(user?.favorite)
+   res.status(200).json(user)
 } catch (error) {
 
  next(error)

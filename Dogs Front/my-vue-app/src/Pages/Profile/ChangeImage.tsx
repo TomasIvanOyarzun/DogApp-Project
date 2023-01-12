@@ -1,6 +1,9 @@
 import React from 'react'
 import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
+import { useAppDispatch } from '../../hooks/toolkitHooks';
+import { imageUrl } from '../../feactures/user/UserSlice';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 interface clodinary {
     access_mode : string
@@ -42,13 +45,14 @@ version_id : string
 width : number
 
 }
+
 const ChangeImage = () => {
 
     
-    const [image, setImage] = React.useState('')
+ 
     const [loading, setLoading] = React.useState(false)
     const hiddenFileInput = React.useRef<HTMLInputElement>(null);
-
+    const dispatch = useAppDispatch()
     const handleClick = () => {
         if(hiddenFileInput.current !== null) hiddenFileInput.current.click()
         
@@ -72,7 +76,7 @@ const ChangeImage = () => {
          
         ).then((res): Promise<clodinary> => res.json())
         .then(data => {
-            setImage(data.secure_url)
+            dispatch(imageUrl(data.secure_url))
             setLoading(false)
         })
         .catch(error => console.log(error)) 
@@ -80,12 +84,12 @@ const ChangeImage = () => {
         
     }
  
-  
+   
 
 
   return (
     <div>
-     <Button sx={{backgroundColor: '##58f09b', backgroundImage: 'linear-gradient(45deg, #58f09b 0%, #06812f 100%)', border: 'none', color: '#fff', fontWeight: 'bold', boxShadow: 'none'}} variant='contained' onClick={handleClick}>Upload Photo</Button>
+     <Button startIcon={<CloudUploadIcon/>} sx={{backgroundColor: '##58f09b', backgroundImage: 'linear-gradient(45deg, #58f09b 0%, #06812f 100%)', border: 'none', color: '#fff', fontWeight: 'bold', boxShadow: 'none'}} variant='contained' onClick={handleClick}>Upload Photo</Button>
     <input
     
      type="file"

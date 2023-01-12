@@ -47,10 +47,9 @@ const CardDog = ({ dog } : Props) => {
   const user : getUserData = JSON.parse(localStorage.getItem('user') as string)
   const {data, isSuccess} = useFetchFavoriteUserQuery(user?._id)
   const [expanded, setExpanded] = React.useState(false);
-  const [active2, setActive2] = React.useState(false)
+ 
   const [updateUser] = useFetchUpdateUserMutation()
-  const [active, setActive] = React.useState( isSuccess && data?.includes(dog._id))
-  console.log('soy consola', active)
+
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -58,8 +57,7 @@ const CardDog = ({ dog } : Props) => {
   
 
   const handleOnClick = (e : React.SyntheticEvent<Element, Event>) => {
-    // setActive(!active)
-    // setActive2(true)
+   
 
     const unicos = data?.filter((valor, indice) => {
       return data.indexOf(valor) === indice;
@@ -107,7 +105,7 @@ const CardDog = ({ dog } : Props) => {
      
         
       
-     {user &&  <FormControlLabel checked={isSuccess && data.includes(dog._id)}  value={dog._id} onChange={handleOnClick} control={<Checkbox  color='success'  icon={<FavoriteIcon />} checkedIcon={<FavoriteIcon />} />} label="Favorite" />}
+     {user &&  <FormControlLabel checked={isSuccess && data?.includes(dog._id as string)}  value={dog._id} onChange={handleOnClick} control={<Checkbox  color='success'  icon={<FavoriteIcon />} checkedIcon={<FavoriteIcon />} />} label="Favorite" />}
     
       <ExpandMore
         expand={expanded}

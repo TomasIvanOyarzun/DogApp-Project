@@ -3,7 +3,7 @@ import { postDog, getAllDogs, updateDog , getDogById, getTemperament} from "../.
 
 const router = Router()
 
-router.post('/dog', postDog)
+router.post('/create/dog', postDog)
 router.get('/dogs', getAllDogs)
 router.put('/dog/:id', updateDog)
 router.get('/dog/:id', getDogById)

@@ -19,15 +19,15 @@ export const getAllComment = async (req: Request, res: Response , next : NextFun
 
   export const getCommentByDog = async (req: Request, res: Response , next : NextFunction) => {
     const {id} = req.params
+   
     try {
-           const dog = await CommentModel.find({dog : id, exits: true}).sort({_id: -1})
+           const dog = await CommentModel.find({dog : id, exits : true}).sort({_id : -1})
 
-           if(dog.length > 0) {
+          
               res.status(200).json(dog)
-              return
-           } 
+           
 
-           res.status(400).json({msg : 'no exist comments'})
+         
     } catch (error) {
       next(error)
     }
@@ -35,7 +35,7 @@ export const getAllComment = async (req: Request, res: Response , next : NextFun
   export const postComment = async (req: Request, res: Response , next : NextFunction) => {
 
      const {dog, comment, user} : commentPost = req.body
-    
+      console.log(req.body)
     try {
         const newComment = new CommentModel({dog, comment, user})
         await newComment.save()
@@ -71,7 +71,7 @@ export const getAllComment = async (req: Request, res: Response , next : NextFun
   
    
    
-     const user = await CommentModel.find({user : id , exits : true})
+     const user = await CommentModel.find({user : id , exits : true}).populate('dog')
       
   
      res.status(200).json(user)
@@ -81,3 +81,25 @@ export const getAllComment = async (req: Request, res: Response , next : NextFun
    
   }
   }
+
+  // export const getCommentByDog2 = async (req: Request, res: Response , next : NextFunction) => {
+  //   const {id} = req.params
+  //   try {
+  //          const dog = await CommentModel.find({dog : id, exits: true})
+  //          .sort({_id: -1})                 
+                                            
+                       
+                       
+  //                       .populate('dog')
+  //                       .exec(); 
+
+  //          if(dog.length > 0) {
+  //             res.status(200).json(dog)
+  //             return
+  //          } 
+
+  //          res.status(400).json({msg : 'no exist comments'})
+  //   } catch (error) {
+  //     next(error)
+  //   }
+  // }
