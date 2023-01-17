@@ -29,8 +29,10 @@ const NavMenuUser = () => {
     };
 
     const handleOnClick = () => {
-        localStorage.removeItem('user')
-        dispatch(userActive(false))
+      localStorage.removeItem('user')
+      dispatch(userActive(false))
+     
+        document.location.reload()
     }
   return (
     <>
@@ -85,18 +87,13 @@ const NavMenuUser = () => {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
        
-        <Link style={{textDecoration: 'none', color: '#666'}} to={`/profile`}>
+        <Link style={{textDecoration: 'none', color: '#666'}} to={`/profile/main`}>
         <MenuItem>
           <Avatar /> My account
         </MenuItem>
          </Link>
         <Divider />
-        <MenuItem>
-          <ListItemIcon>
-            <PersonAdd fontSize="small" />
-          </ListItemIcon>
-          Add another account
-        </MenuItem>
+        
         <MenuItem>
           <ListItemIcon>
             <Settings fontSize="small" />

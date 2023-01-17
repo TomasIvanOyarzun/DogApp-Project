@@ -19,6 +19,9 @@ export class Comment {
 
     @prop({type : Boolean, default: true})   
     exits : boolean
+
+  
 }
+
 
 export const CommentModel = getModelForClass(Comment)

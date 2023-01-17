@@ -23,9 +23,10 @@ import { errorInput } from './controlForm';
 import { useWidthScreen } from '../../../hooks/customHooks';
 import LoadingButton from '@mui/lab/LoadingButton'
 
-
+import Alert from '@mui/material/Alert';
 
 import SendIcon from '@mui/icons-material/Send';
+import { ErrorResponse } from '@remix-run/router';
   const initialState = {
     name : '',
     minHeight : '',
@@ -64,9 +65,10 @@ const Form = () => {
     const {data, isSuccess} = useFetchTemperamentsQuery('')
     const [loading, setLoading] = React.useState(false)
     const imageUrl = useAppSelector(state => state.user.imageUrl)
-     const [error, setError] = React.useState(initialState2)
+     const [errors, setError] = React.useState(initialState2)
     const [value, setValue] = React.useState<Temperaments[]>([{ _id: '63a7f3f463c8f5f1d27890a8', name: 'Active'}]);
     const [postDogSave, resData] = useFetchDogsPostMutation()
+   
     const {width} = useWidthScreen()
     const handleOnChange = (e : React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
             setDog({
@@ -106,16 +108,16 @@ const Form = () => {
         
     }
 
-  console.log(data)
+   console.log(JSON.stringify(resData?.data?.error.data))
   return (
-  <>
+  <>    
        {resData.isError === false && resData.isSuccess === true && <AlertText msg='it was created correctly'/>}
-        
+       {resData.error  &&   <Alert variant="filled" severity="error">{JSON.stringify(resData?.data?.error.data)}</Alert>}
     <Box >
     <form onSubmit={handleOnSubmit} style={{display:'flex', flexWrap:'wrap', width:'100%', justifyContent:'center'}}>
 <FormControl sx={{ m: 1, width: width < 400 ? '100%' : '85%' }} variant="outlined">
  <OutlinedInput
-    error= {error.name.length > 0}
+    error= {errors.name.length > 0}
    name = 'name'
    onChange={handleOnChange}
    value = {dog.name}
@@ -131,13 +133,13 @@ const Form = () => {
     </InputAdornment>
   }
  />
- {error.name.length > 0 ?<Typography color='red' fontWeight='100'>{error.name}</Typography> : <FormHelperText id="outlined-weight-helper-text">breed name</FormHelperText>}
+ {errors.name.length > 0 ?<Typography color='red' fontWeight='100'>{errors.name}</Typography> : <FormHelperText id="outlined-weight-helper-text">breed name</FormHelperText>}
  
 </FormControl>
 
 <FormControl sx={{ m: 1, width: width < 400 ? '100%' : '40%' }} variant="outlined">
  <OutlinedInput
- error= {error.minHeight.length > 0}
+ error= {errors.minHeight.length > 0}
  type='number'
    name='minHeight'
    onChange={handleOnChange}
@@ -154,7 +156,7 @@ const Form = () => {
     </InputAdornment>
   }
  />
- {error.minHeight.length > 0 ?<Typography color='red'>{error.minHeight}</Typography> : <FormHelperText id="outlined-weight-helper-text">Minimun height</FormHelperText>}
+ {errors.minHeight.length > 0 ?<Typography color='red'>{errors.minHeight}</Typography> : <FormHelperText id="outlined-weight-helper-text">Minimun height</FormHelperText>}
 
 </FormControl>
 
@@ -162,7 +164,7 @@ const Form = () => {
 <FormControl sx={{ m: 1, width: width < 400 ? '100%' : '40%' }} variant="outlined">
  <OutlinedInput
  type='number'
- error= {error.maxHeight.length > 0}
+ error= {errors.maxHeight.length > 0}
    name='maxHeight'
    onChange={handleOnChange}
    value = {dog.maxHeight}
@@ -179,12 +181,12 @@ const Form = () => {
     </InputAdornment>
   }
  />
- {error.maxHeight.length > 0 ? <Typography color='red'>{error.maxHeight}</Typography> : <FormHelperText id="outlined-weight-helper-text">Maximun height</FormHelperText>}
+ {errors.maxHeight.length > 0 ? <Typography color='red'>{errors.maxHeight}</Typography> : <FormHelperText id="outlined-weight-helper-text">Maximun height</FormHelperText>}
 </FormControl>
 
 <FormControl sx={{ m: 1, width: width < 400 ? '100%' : '40%' }} variant="outlined">
  <OutlinedInput
- error={error.minWeight.length > 0}
+ error={errors.minWeight.length > 0}
  type='number'
    name='minWeight'
    onChange={handleOnChange}
@@ -200,7 +202,7 @@ const Form = () => {
     </InputAdornment>
   }
  />
- {error.minWeight.length > 0 ? <Typography color='red'>{error.minWeight}</Typography> : <FormHelperText id="outlined-weight-helper-text">Weight</FormHelperText>}
+ {errors.minWeight.length > 0 ? <Typography color='red'>{errors.minWeight}</Typography> : <FormHelperText id="outlined-weight-helper-text">Weight</FormHelperText>}
  
 </FormControl>
 
@@ -209,7 +211,7 @@ const Form = () => {
  <OutlinedInput
  type='number'
  name='maxWeight'
- error={error.maxWeight.length > 0}
+ error={errors.maxWeight.length > 0}
  onChange={handleOnChange}
  value = {dog.maxWeight}
    endAdornment={<InputAdornment position="end">kg</InputAdornment>}
@@ -223,14 +225,14 @@ const Form = () => {
     </InputAdornment>
   }
  />
- {error.maxWeight.length > 0 ? <Typography color='red'>{error.maxWeight}</Typography> : <FormHelperText id="outlined-weight-helper-text">Weight</FormHelperText>}
+ {errors.maxWeight.length > 0 ? <Typography color='red'>{errors.maxWeight}</Typography> : <FormHelperText id="outlined-weight-helper-text">Weight</FormHelperText>}
 
 </FormControl>
 
 <FormControl sx={{ m: 1, width: width < 400 ? '100%' : '40%' }} variant="outlined">
  <OutlinedInput
  type='number'
- error={error.minLife_span.length > 0}
+ error={errors.minLife_span.length > 0}
  name='minLife_span'
  onChange={handleOnChange}
  value = {dog.minLife_span}
@@ -246,7 +248,7 @@ const Form = () => {
     </InputAdornment>
   }
  />
-  {error.minLife_span.length > 0 ? <Typography color='red'>{error.minLife_span}</Typography> : <FormHelperText id="outlined-weight-helper-text">life span</FormHelperText>}
+  {errors.minLife_span.length > 0 ? <Typography color='red'>{errors.minLife_span}</Typography> : <FormHelperText id="outlined-weight-helper-text">life span</FormHelperText>}
  
 </FormControl>
 
@@ -255,7 +257,7 @@ const Form = () => {
  <OutlinedInput
  type='number'
  name='maxLife_span'
- error={error.maxLife_span.length > 0}
+ error={errors.maxLife_span.length > 0}
  onChange={handleOnChange}
  value = {dog.maxLife_span}
    endAdornment={<InputAdornment position="end">life</InputAdornment>}
@@ -269,7 +271,7 @@ const Form = () => {
     </InputAdornment>
   }
  />
-  {error.maxLife_span.length > 0 ? <Typography color='red'>{error.maxLife_span}</Typography> : <FormHelperText id="outlined-weight-helper-text">life span</FormHelperText>}
+  {errors.maxLife_span.length > 0 ? <Typography color='red'>{errors.maxLife_span}</Typography> : <FormHelperText id="outlined-weight-helper-text">life span</FormHelperText>}
 
 </FormControl>
 {isSuccess && data !== undefined &&
@@ -305,7 +307,7 @@ const Form = () => {
 />
 
 }
-{error.temperament.length > 0  && <Typography color='red'>{error.temperament}</Typography> }
+{errors.temperament.length > 0  && <Typography color='red'>{errors.temperament}</Typography> }
 
  <Box margin='22px' display='flex' flexDirection='column' justifyContent='space-evenly' width='100%' marginTop='20px' alignItems='center' >
 
@@ -319,7 +321,7 @@ const Form = () => {
 
 
 <LoadingButton sx={{ width: '50%', backgroundColor: '##58f09b', backgroundImage: 'linear-gradient(45deg, #58f09b 0%, #06812f 100%)', border: 'none', color: '#fff', fontWeight: 'bold', boxShadow: 'none'}}
-         disabled={Object.values(error).join('').length > 0 ? true : false}
+         disabled={Object.values(errors).join('').length > 0 ? true : false || Object.values(dog).join('').length > 0 ? false : true}
           type='submit'
           endIcon={<SendIcon />}
           loading={loading}

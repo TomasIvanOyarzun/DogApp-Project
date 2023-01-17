@@ -1,9 +1,8 @@
-import React from 'react'
-import axios from 'axios'
+
 import { Box } from '@mui/system'
 import Panel from './Panel/Panel'
 import { Outlet } from 'react-router-dom'
-import { Typography } from '@mui/material'
+
 import { useWidthScreen } from '../../hooks/customHooks'
 
 const Profile = () => {
@@ -22,9 +21,9 @@ const Profile = () => {
        
            {width > 900 && <Panel/>}
          
-     <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: width > 699 ? 'space-between' : 'center', alignItems: 'center', width : '100%' , height :'90%'}}>
+     <Box sx={{display: 'flex', justifyContent: width > 699 ? 'space-between' : 'center', alignItems: 'center', width : '100%' , height :'90%'}}>
         
-        <Outlet/>
+     <Outlet/>
      </Box>
      </Box>
     </Box>

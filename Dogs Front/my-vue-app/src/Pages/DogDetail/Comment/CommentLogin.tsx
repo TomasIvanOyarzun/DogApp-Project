@@ -37,10 +37,10 @@ const CommentLogin = () => {
           postComment(input)
           setInput(initialState)
     }
-    console.log(input)
+ 
   return (
-    <Box sx={{ width: '100%' , paddingBottom: '20px'}}>
-     <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+    <Box sx={{ width: '100%'  }}>
+     <Avatar alt="Remy Sharp" src={user?.image} />
         <Box sx={{display: 'flex', flexDirection: 'column'}}>
             <form onSubmit={handleOnsubmit}>
         <FormControl variant="standard" sx={{ width: '100%', marginBottom: '20px' }} >

@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import { commentPost } from "../../types";
 
 import { CommentModel } from "../../models/Comment";
-
+import { LikeModel } from "../../models/Like";
 
 export const getAllComment = async (req: Request, res: Response , next : NextFunction) => {
     try {
@@ -22,6 +22,7 @@ export const getAllComment = async (req: Request, res: Response , next : NextFun
    
     try {
            const dog = await CommentModel.find({dog : id, exits : true}).sort({_id : -1})
+            .populate('user')
 
           
               res.status(200).json(dog)
@@ -56,6 +57,8 @@ export const getAllComment = async (req: Request, res: Response , next : NextFun
             { $set: req.body },
             { new: true })
         
+
+            
             return res.status(200).json(update)
     } catch (error) {
         next(error)
@@ -71,7 +74,7 @@ export const getAllComment = async (req: Request, res: Response , next : NextFun
   
    
    
-     const user = await CommentModel.find({user : id , exits : true}).populate('dog')
+     const user = await CommentModel.find({user : id , exits : true}).populate('dog').populate('user')
       
   
      res.status(200).json(user)
@@ -82,24 +85,42 @@ export const getAllComment = async (req: Request, res: Response , next : NextFun
   }
   }
 
-  // export const getCommentByDog2 = async (req: Request, res: Response , next : NextFunction) => {
-  //   const {id} = req.params
-  //   try {
-  //          const dog = await CommentModel.find({dog : id, exits: true})
-  //          .sort({_id: -1})                 
-                                            
-                       
-                       
-  //                       .populate('dog')
-  //                       .exec(); 
+  export const LikePost = async (req: Request, res: Response , next : NextFunction) => {
 
-  //          if(dog.length > 0) {
-  //             res.status(200).json(dog)
-  //             return
-  //          } 
+  
+    
+    try {
+       const newLike = new LikeModel(req.body)
+       await newLike.save()
+         res.status(200).json(newLike)
+    } catch (error) {
+      next(error)
+    }
+  }
 
-  //          res.status(400).json({msg : 'no exist comments'})
-  //   } catch (error) {
-  //     next(error)
-  //   }
-  // }
+  export const getLikeForId = async (req: Request, res: Response , next : NextFunction) => {
+
+     
+    
+    try {
+       const like = await LikeModel.find()
+           
+         res.status(200).json(like)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  
+  export const removeLikeModel = async (req: Request, res: Response , next : NextFunction) => {
+
+      const {id} = req.params
+    
+    try {
+       const like = await LikeModel.findById(id).remove()
+           
+         res.status(200).json(like)
+    } catch (error) {
+      next(error)
+    }
+  }

@@ -7,15 +7,12 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
-import { styled, alpha } from '@mui/material/styles';
+import { styled} from '@mui/material/styles';
 import PetsIcon from '@mui/icons-material/Pets';
 import Chip from '@mui/material/Chip';
 import { emphasize} from '@mui/material/styles';
@@ -25,12 +22,17 @@ import Login from './LoginForm/Login';
 import NavMenuUser from './navUserMenu/NavMenuUser';
 import { useAppDispatch, useAppSelector } from '../../hooks/toolkitHooks';
 import { useLocation, useNavigate } from 'react-router-dom';
-
-import logo from '../../images/logo.png'
+import logo from '../../images/fetchDog.png'
 import { Container } from '@mui/system';
-import { userActive } from '../../feactures/user/UserSlice';
+import { getUserData, useFetchFavoriteUserQuery, userActive } from '../../feactures/user/UserSlice';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { usePositionY, useWidthScreen } from '../../hooks/customHooks';
+import FavIcon from './favoriteIcon/FavIcon';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import HomeIcon from '@mui/icons-material/Home';
+import { Link } from 'react-router-dom';
+import SearchCustom from './Search/SearchCustom';
+
 
 interface Props {
   /**
@@ -62,21 +64,7 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => {
 const drawerWidth = 240;
 
 
-const Search = styled('div')(({ theme }) => ({
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
-      width: 'auto',
-    },
-  }));
+
   
   const SearchIconWrapper = styled('div')(({ theme }) => ({
     padding: theme.spacing(0, 2),
@@ -102,59 +90,65 @@ const Search = styled('div')(({ theme }) => ({
     },
   }));
 const Navbar = (props: Props) => {
+ 
   const activeUser = useAppSelector(state => state.user.active)
   const [openOut, setOpenOut] = React.useState(false);
   const dispatch = useAppDispatch()
    const {width} = useWidthScreen()
    const [y , setY ] = usePositionY()
     const [mobileOpen, setMobileOpen] = React.useState(false);
-     const location = useLocation()
-     const navigate = useNavigate()
-     const { window } = props;
+    const locations = useLocation()
+  
+     
+     const { window  } = props;
     const handleDrawerToggle = () => {
       setMobileOpen((prevState) => !prevState);
     };
     
-
+ 
     const handleOnClicks = () => {
       localStorage.removeItem('user')
       dispatch(userActive(false))
+     
+        document.location.reload()
   }
-    const absolute =  location.pathname === '/' ? 'absolute' : ''
-    const bgColor =  location.pathname === '/' && y < 100 ? 'transparent' : '#111'
-   
-    const shadow =   location.pathname === '/' ? '0' : '1'
+    const absolute =  locations.pathname === '/' ? 'absolute' : ''
+    const bgColor =  locations.pathname === '/' && y < 800 ? 'transparent' : '#111'
 
-    const navItems = [{ component : <Button onClick={handleOnClicks}><LoginIcon fontSize='large'  />{`Logout`}</Button> }, {name: 'Contact' , component: <Button>< PermContactCalendarIcon fontSize='large'/>{`Contact`}</Button>}, {component :<Button onClick={() => navigate('/home')}>< PetsIcon fontSize='large'/>{`Dogs`}</Button> }, {component : <Button><FavoriteBorderIcon fontSize='large'/>{`Favorites`}</Button>}];
-    const navItemsLogin = [{ component :    <Button  sx={{ color: '#fff' }} onClick={() => setOpenOut(!openOut)}> <LoginIcon fontSize='large'/>{`Login`}</Button> }, {name: 'Contact' , component: <Button>< PermContactCalendarIcon fontSize='large'/>{`Contact`}</Button>}, {component :<Button onClick={() => navigate('/home')}>< PetsIcon fontSize='large'/>{`Dogs`}</Button>}] 
+   
+    const shadow =   locations.pathname === '/' ? '0' : '1'
+
+    const navItems = [{ link : '/', component : <Button  sx={{ color: '#fff' }}  ><HomeIcon fontSize='large' />{`Inicio`}</Button>},{ link : '/profile/main', component : <Button sx={{ color: '#fff' }} ><AccountBoxIcon  fontSize='large' />{`My account`}</Button>}, {link : '/home', component :<Button sx={{ color: '#fff' }} >< PetsIcon fontSize='large'/>{`Dogs`}</Button> },  {name: 'Contact' , component: <Button sx={{ color: '#fff' }} >< PermContactCalendarIcon fontSize='large'/>{`Contact`}</Button>}, {link : '/profile/favorites',component : <Button sx={{ color: '#fff' }} ><FavoriteBorderIcon fontSize='large'/>{`Favorites`}</Button>},{ component : <Button sx={{ color: '#fff' }}  onClick={handleOnClicks}><LoginIcon fontSize='large'  />{`Logout`}</Button> }];
+    const navItemsLogin = [{ link : '/', component : <Button sx={{ color: '#fff' }}  ><HomeIcon fontSize='large' />{`Inicio`}</Button>},{ component :    <Button  sx={{ color: '#fff' }} onClick={() => setOpenOut(!openOut)}> <LoginIcon fontSize='large'/>{`Login`}</Button> }, {name: 'Contact' , component: <Button sx={{ color: '#fff' }} >< PermContactCalendarIcon fontSize='large'/>{`Contact`}</Button>}, { link : '/home', component :<Button sx={{ color: '#fff' }}  >< PetsIcon fontSize='large'/>{`Dogs`}</Button>}] 
     const navItemsTrue = activeUser  || localStorage.getItem('user') ?  navItems :  navItemsLogin 
-    const displayNone = location.pathname !== '/profile'  ?  'flex' : 'none'
+    const displayNone = locations.pathname !== '/profile'  ?  'flex' : 'none'
     const drawer = (
-        <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center', bgcolor:'greenyellow' }}>
-           <img src={logo} width='120px'/>
+        <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center', bgcolor:'#262626' }}>
+           <img src={logo} width='150px'/>
           <Divider />
           <List>
             {navItemsTrue.map((item, index) => (
-              <ListItem key={index} disablePadding sx={{ display: 'flex', justifyContent: 'center' }} >
-              
-                <Box width='100%'>{item.component}</Box>
-               
-              </ListItem>
+             <Link style={{textDecoration: 'none'}} to={item.link ? item.link : locations.pathname}>
+             <ListItem key={index} disablePadding sx={{ display: 'flex', justifyContent: 'center' }} >
+             
+             <Box width='100%'>{item.component}</Box>
+            
+           </ListItem>
+             </Link>
             ))}
           </List>
         </Box>
       );
     
 
-    const container = window !== undefined ? () => window().document.body : undefined;
-
+   
   return (
     <>
      {openOut && <Login openOut={openOut} setOpenOut={setOpenOut}/>}
    
     <Box  sx={{ display: width > 600 ? displayNone : 'flex', position : absolute}}>
     <CssBaseline />
-    <AppBar component="nav" sx={{ color: '#555555',  backgroundColor: bgColor, boxShadow : shadow, transition : '0.6s ease'}} >
+    <AppBar component="nav" sx={{ color: '#555555', backgroundColor: bgColor , boxShadow : shadow, transition : '0.6s ease'}} >
       <Container>
       <Toolbar  sx={{ display: 'flex', justifyContent: 'space-between'}}>
         <IconButton
@@ -167,27 +161,21 @@ const Navbar = (props: Props) => {
           <MenuIcon />
         </IconButton>
         
-       {width > 600 && <img src={logo} width='100px'/>}
+       {width > 600 && <img src={logo} width='150px'/>}
        
         
 
-        { location.pathname === '/home' && 
-          <Search>
-          <SearchIconWrapper>
-            <SearchIcon />
-          </SearchIconWrapper>
-          <StyledInputBase
-            placeholder="Search…"
-            inputProps={{ 'aria-label': 'search' }}
-          />
-        </Search>
-        }
-        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+       <SearchCustom/>
+        <Box sx={{ display: { xs: 'none', sm: 'block' } , width: '15%'}}>
         
-             
-           
-            {activeUser && localStorage.getItem('user') ? <NavMenuUser/> : 
-            <Button  sx={{ color: '#111' }} onClick={() => setOpenOut(!openOut)}> <LoginIcon/>{`Login`}</Button> }
+         <Box sx={{  width: '100%', display: 'flex', justifyContent: 'space-evenly', alignItems: 'center'}}>
+          
+           {localStorage.getItem('user') && <FavIcon/>}
+        
+         
+            {(localStorage.getItem('user') === null )|| (localStorage.getItem('user') === undefined) ?  (<Button  sx={{ color: '#fff' }} onClick={() => setOpenOut(!openOut)}> <LoginIcon/>{`Login`}</Button>)  :  (<NavMenuUser/>)
+            }
+         </Box>
         
         </Box>
       </Toolbar>
@@ -195,7 +183,7 @@ const Navbar = (props: Props) => {
     </AppBar>
     <Box component="nav">
       <Drawer
-        container={container}
+       
         variant="temporary"
         open={mobileOpen}
         onClose={handleDrawerToggle}

@@ -12,9 +12,10 @@ import { Divider, Grid, Typography } from '@mui/material'
 
 
 const Temperament = () => {
+  const options = useAppSelector(state => state.dogReducer.fetchDog)
     const [temperament, setTemperament] = React.useState('');
     const dispatch = useAppDispatch()
-    const options = useAppSelector(state => state.dogReducer.fetchDog)
+    
     const handleChange = (event: SelectChangeEvent) => {
       setTemperament(event.target.value as string);
         dispatch(filterOptions({
@@ -26,7 +27,7 @@ const Temperament = () => {
     const {data} = useFetchTemperamentsQuery('')
   return (
     <>
-    <Typography gutterBottom variant="h6" component="div">
+    <Typography   color='#464646' fontWeight='500' gutterBottom variant="h6" component="div">
        Temperaments
        </Typography>
        <Box sx={{ minWidth: 120, marginBottom: '15px' }}>
@@ -35,12 +36,12 @@ const Temperament = () => {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={temperament}
+          value={options.temperament}
           label="temperament"
           onChange={handleChange}
         >
           {data?.map(el => (
-            <MenuItem key={el._id} value={el.name}>{el.name}</MenuItem>
+            <MenuItem color='#464646' key={el._id} value={el.name}>{el.name}</MenuItem>
           ))}
           
         </Select>

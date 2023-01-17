@@ -38,7 +38,7 @@ const FormDog = ({open , setOpen} : Props) => {
   const handleClose = () => {
     setOpen(false);
   };
-   console.log(open)
+   
   return (
     <div>
     
@@ -50,7 +50,7 @@ const FormDog = ({open , setOpen} : Props) => {
          to complete with all existing breeds.
         </DialogContentText>
 
-        <Form setOpen={setOpen}/>
+        <Form />
        
       </DialogContent>
       <DialogActions>

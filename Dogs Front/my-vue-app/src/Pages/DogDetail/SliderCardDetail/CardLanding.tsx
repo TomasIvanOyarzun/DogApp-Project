@@ -7,6 +7,7 @@ import { DogApi } from '../../../feactures/dog/DogSlice';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import { Box } from '@mui/system';
+import { Link } from 'react-router-dom';
 
 
 interface Props {
@@ -19,7 +20,8 @@ const CardLanding = ({dog, temp} : Props) => {
 
 
   return (
-    <Card sx={{ maxWidth: 345 , height: '95%' }}>
+    <Link style={{textDecoration: 'none'}} to={`/dog/${dog._id}`}>
+     <Card sx={{ maxWidth: 345 , height: '95%', boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px' }}>
     <CardActionArea>
       <CardMedia
         component="img"
@@ -35,7 +37,7 @@ const CardLanding = ({dog, temp} : Props) => {
         <Box display='flex' flexWrap='wrap' justifyContent='space-evenly'>
        
       {dog.temperament.map((el,index) => (
-        <Chip key={index} label={el} sx={{marginBottom: '3px', }} style={{backgroundColor : el === temp ? 'orange' : '#ECEBEB'}}  />
+        <Chip key={index} label={el} sx={{marginBottom: '3px', }} style={{backgroundColor : el === temp ? '#64BE43' : '#ECEBEB'}}  />
 
       ))}
       
@@ -43,6 +45,7 @@ const CardLanding = ({dog, temp} : Props) => {
       </CardContent>
     </CardActionArea>
   </Card>
+    </Link>
   )
 }
 

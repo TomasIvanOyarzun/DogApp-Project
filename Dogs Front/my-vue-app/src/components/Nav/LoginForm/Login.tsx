@@ -29,6 +29,7 @@ import AlertTitle from '@mui/material/AlertTitle';
 import Avatar from '@mui/material/Avatar';
 import { Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useWidthScreen } from '../../../hooks/customHooks';
 
 
 interface Props {
@@ -45,7 +46,7 @@ const Login = ({openOut, setOpenOut} : Props) => {
   const dispatch = useAppDispatch()
   const [login, result] = useFetchAuthenticateUserMutation()
     const [input, setInput] = React.useState(initialState)
-   
+    const {width } = useWidthScreen()
     
     const {data, isSuccess} = useFetchDataUserQuery(result.data?.token)
    
@@ -95,9 +96,9 @@ const Login = ({openOut, setOpenOut} : Props) => {
       
        <>
    
-      <Dialog open={openOut} onClose={handleClose} >
-        <Box display='flex' justifyContent='center'  >
-            <Box display='flex' flexDirection='column' alignItems='center' >
+      <Dialog open={openOut} onClose={handleClose}  >
+        <Box display='flex' justifyContent='center'   >
+            <Box display='flex' flexDirection='column' alignItems='center'  >
             
             <Avatar
             alt="Remy Sharp"
@@ -126,8 +127,8 @@ Log in to create dog breeds and have access to more content on the page.
 
        
 
-          <form style={{width: '100%', height:'200px', display : 'flex', flexDirection: 'column', justifyContent: 'space-around', alignItems: 'center' }} onSubmit={handleOnsubmit}>
-         <Box sx={{width: '80%', height:'200px', display : 'flex', flexDirection: 'column', justifyContent: 'space-around', alignItems: 'center'}}>
+          <form style={{ width: '100%', height:'200px', display : 'flex', flexDirection: 'column', justifyContent: 'space-around', alignItems: 'center' }} onSubmit={handleOnsubmit}>
+         <Box sx={{width: width > 600 ? '80%' : '100%', height:'200px', display : 'flex', flexDirection: 'column', justifyContent: 'space-around', alignItems: 'center'}}>
           
           <FormControl variant="standard" fullWidth>
         <InputLabel color='success' >

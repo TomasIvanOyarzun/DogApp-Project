@@ -21,8 +21,11 @@ import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import VideoLabelIcon from '@mui/icons-material/VideoLabel';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 import { StepIconProps } from '@mui/material/StepIcon';
-
-const steps = ['Your Account Data', 'Favorite types of dogs', 'Finish'];
+import Info from './form/Info';
+import FinishMessage from './FinishMessage';
+import InfoIcon from '@mui/icons-material/Info';
+import { useAppSelector } from '../../hooks/toolkitHooks';
+const steps = ['Your Account Data', 'Info', 'Finish'];
 
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
@@ -92,13 +95,13 @@ const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.active}`]: {
     [`& .${stepConnectorClasses.line}`]: {
       backgroundImage:
-        'linear-gradient( 95deg,rgb(242,113,33) 0%,rgb(233,64,87) 50%,rgb(138,35,135) 100%)',
+        'linear-gradient( 95deg,rgb(116, 213, 116) 0%,rgb(116, 213, 116) 50%,rgb(116, 213, 116) 100%)',
     },
   },
   [`&.${stepConnectorClasses.completed}`]: {
     [`& .${stepConnectorClasses.line}`]: {
       backgroundImage:
-        'linear-gradient( 95deg,rgb(242,113,33) 0%,rgb(233,64,87) 50%,rgb(138,35,135) 100%)',
+        'linear-gradient( 95deg,rgb(116, 213, 116) 0%,rgb(116, 213, 116) 50%,rgb(116, 213, 116) 100%)',
     },
   },
   [`& .${stepConnectorClasses.line}`]: {
@@ -124,12 +127,13 @@ const ColorlibStepIconRoot = styled('div')<{
   alignItems: 'center',
   ...(ownerState.active && {
     backgroundImage:
-      'linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)',
-    boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)',
+      'linear-gradient( 136deg, rgb(116, 213, 116) 0%, rgb(116, 213, 116) 50%, rgb(116, 213, 116) 100%)',
+    
+    boxShadow : 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px'
   }),
   ...(ownerState.completed && {
     backgroundImage:
-      'linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)',
+      'linear-gradient( 136deg, rgb(116, 213, 116) 0%, rgb(116, 213, 116) 50%, rgb(138,35,135) 100%)',
   }),
 }));
 
@@ -137,8 +141,8 @@ function ColorlibStepIcon(props: StepIconProps) {
   const { active, completed, className } = props;
 
   const icons: { [index: string]: React.ReactElement } = {
-    1: <SettingsIcon />,
-    2: <GroupAddIcon />,
+    1: <GroupAddIcon  />,
+    2: <InfoIcon />,
     3: <VideoLabelIcon />,
   };
 
@@ -159,13 +163,18 @@ let initialState = {
 }
 const Register = () => {
     const [error, setError] = React.useState<form>(initialState)
+    const [errorBack, setErrorBack] = React.useState('')
     const [input, setInput] = React.useState<form>(initialState)
     const [registerUser, resultRegister] = useFetchRegisterMutation()
     const [activeStep, setActiveStep] = React.useState(0);
     const [completed, setCompleted] = React.useState<{
       [k: number]: boolean;
     }>({});
-  
+ 
+
+    const [activeMsg, setActiveMsg] = React.useState(false)
+      
+    console.log(completed)
     const totalSteps = () => {
       return steps.length;
     };
@@ -200,26 +209,34 @@ const Register = () => {
       setActiveStep(step);
     };
   
-    const handleComplete = () => {
+    const handleComplete = async() => {
       const newCompleted = completed;
       newCompleted[activeStep] = true;
       setCompleted(newCompleted);
       handleNext();
 
-      if (completedSteps() === totalSteps() - 1) {
-        registerUser(input)
-      }
-    };
+      if (completedSteps() === totalSteps() ) {
+      await registerUser(input).unwrap().then((response) => {
+        // Handle the response here
+        console.log(response)
+      }).catch((error ) => {
+        // Handle the error here
+        setErrorBack(error.data.msg)})
+    }
   
-    const handleReset = () => {
-      setActiveStep(0);
-      setCompleted({});
-    };
-   console.log(input)
+    }
+   console.log('active msg state', activeMsg)
+   console.log('el length de errorBack es === 0 ?',errorBack.length === 0)
+   console.log('errorBack.length > 0' ,errorBack.length > 0)
   return (
+
+    <>
+
+    { errorBack.length > 0 && <FinishMessage type="error" msgBackError={errorBack} />}
+    { resultRegister.isSuccess  && resultRegister.isError === false && <FinishMessage type="success" email={input.email} />}
     <Container>
            
-        <Box sx={{ display: 'flex' , flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100vh'}}>
+        <Box sx={{ display: 'flex' , flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100vh', }}>
         <Typography variant="h3" fontWeight='bold' gutterBottom>Register</Typography> 
         <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', background: '#fff', borderRadius: '6px' , border: '2px solid #ECECEC'}}>
           <Box sx={{  width: '100%', margin: '40px' }}>
@@ -232,21 +249,7 @@ const Register = () => {
         ))}
       </Stepper>
       <div>
-        {allStepsCompleted() ? (
-          <React.Fragment>
-            { resultRegister.isError === false && <Box sx={{ display: 'flex', flexDirection: 'column', pt: 2 }}>
-            <Typography variant="h5" gutterBottom sx={{ mt: 2, mb: 1 }}>
-              All steps completed - you&apos;re finished
-            </Typography>
-            <Alert severity="success">
-              <AlertTitle>Success</AlertTitle>
-              Thanks for signing up, we'll send you an email so you can <strong>activate your account </strong>
-             </Alert>
-              
-             
-            </Box>}
-          </React.Fragment>
-        ) : (
+       
           <React.Fragment>
             
            
@@ -258,7 +261,7 @@ const Register = () => {
               </Box>}
 
               { activeStep === 1 && <Box width='100%' display='flex' justifyContent='center'  >
-                      <ListImage/>
+                      <Info />
               </Box>}
 
               { activeStep === 2 && <Box width='100%' display='flex' justifyContent='center'  >
@@ -276,17 +279,17 @@ const Register = () => {
                 Back
               </Button>
               <Box sx={{ flex: '1 1 auto' }} />
-              <Button  disabled={Object.values(error).join('').length > 0 ? true : false} variant="contained"  onClick={handleNext} sx={{ mr: 1 , bgcolor: '#111'}}>
+              <Button  disabled={ Object.values(error).join('').length > 0  } variant="contained"  onClick={handleNext} sx={{ mr: 1 , bgcolor: '#111'}}>
                 Next
               </Button>
-              {activeStep !== steps.length &&
+              {activeStep !== steps.length && 
                 (completed[activeStep] ? (
                   <Typography variant="caption" sx={{ display: 'inline-block' }}>
                     Step {activeStep + 1} already completed
                   </Typography>
                 ) : (
 
-                  <Button disabled={Object.values(error).join('').length > 0 ? true : false} variant="contained" sx={{backgroundColor: '#f09f57', backgroundImage: 'linear-gradient(90deg, #f09f57 0%, #f71c67 100%)' }} onClick={handleComplete}>
+                  <Button disabled={Object.values(error).join('').length > 0  || Object.values(input).join('').length === 0 } variant="contained" sx={{backgroundColor: '#64BE43', color: '#fff', borderRadius: '2px'  }} onClick={handleComplete}>
                     {completedSteps() === totalSteps() - 1
                       ? 'Finish'
                       : 'Complete Step'}
@@ -294,14 +297,16 @@ const Register = () => {
                 ))}
             </Box>
           </React.Fragment>
-        )}
+        
       </div>
       </Box>  
     </Box>
     
         </Box>
     </Container>
+    </>
   )
 }
+
 
 export default Register 

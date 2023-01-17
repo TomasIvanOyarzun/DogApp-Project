@@ -1,7 +1,8 @@
 
-import {prop, getModelForClass, plugin } from '@typegoose/typegoose'
+import {prop, getModelForClass, plugin, Ref } from '@typegoose/typegoose'
 import mongoosePaginate from 'mongoose-paginate-v2';
 import { FilterQuery, PaginateOptions, PaginateResult , PaginateModel} from 'mongoose';
+import { User } from './User';
 
 
 
@@ -27,7 +28,9 @@ export class Dog {
     @prop({type : () => [String],required : true})
       temperament : Array<string>
 
-  
+      @prop({type : String}) 
+      creator : string
+      
     
       static paginate: <T>(
         this: T,

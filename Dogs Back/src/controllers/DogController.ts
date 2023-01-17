@@ -7,17 +7,31 @@ import { IDog } from "../types";
 
 export const getAllDogs = async (req : Request, res: Response, next: NextFunction) => {
     const {temperament} = req.query
-    
+     const order = parseInt(req.query.order as string)
+     const { height , weight , search} = req.query
+   
     const options = {
         limit: 9,
-        page: parseInt(req.query.page as string) 
+        page: parseInt(req.query.page as string) ,
+        sort  : {name : order},
+        
       };
     
     
     try {
+            
+          if(!height && !weight && !search) {
+            const dogs = await DogModel.paginate( { temperament :  { "$regex": `${temperament}`, "$options": "i" } ,
            
+           } , options)
+           return  res.status(200).json(dogs)
+          }
         
-          const dogs = await DogModel.paginate( { temperament :  { "$regex": `${temperament}`, "$options": "i" }}, options)
+          const dogs = await DogModel.paginate( { temperament :  { "$regex": `${temperament}`, "$options": "i" } ,
+           height : {"$regex": `${height}`, "$options": "$gte"},
+         weight : {  "$regex": `${weight}`, "$options": "$gte" },
+         name :  { "$regex": `${search}`, "$options": "i" }
+          } , options)
            res.status(200).json(dogs)
     } catch (error) {
         next(error)

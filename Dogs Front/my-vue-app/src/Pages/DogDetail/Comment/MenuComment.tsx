@@ -9,10 +9,11 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import { Typography } from '@mui/material';
 import DialogComment from './DialogComment';
 import { commentType } from './Comment';
+import { CommentResponse, userForCommentMath } from '../../../feactures/user/UserSlice';
 
 interface Props {
    
-    user: commentType
+    user: CommentResponse
 }
 const MenuComment = ({user} : Props) => {
 
@@ -26,7 +27,7 @@ const MenuComment = ({user} : Props) => {
       setAnchorEl(null);
     };
      
-    console.log(openDialog)
+    
   return (
     <>
     {openDialog && <DialogComment openDialog={openDialog} setOpenDialog={setOpenDialog} user={user}/>}
@@ -44,10 +45,12 @@ const MenuComment = ({user} : Props) => {
         }}
       >
         <MenuItem onClick={handleClose}>
-        <ListItemIcon>
+         
+        <ListItemIcon onClick={() => setOpenDialog(!openDialog)}>
             <DeleteIcon fontSize="small" />
+            <Typography >Delete</Typography>
           </ListItemIcon>
-          <Typography onClick={() => setOpenDialog(!openDialog)} >Delete</Typography>
+          
         </MenuItem>
        
         

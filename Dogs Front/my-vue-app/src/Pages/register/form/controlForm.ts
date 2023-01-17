@@ -16,28 +16,30 @@ export const errorInput = (input : form) => {
     }
   
    if(input.name.length >= 25) {
-    err.name = '*maximo 25 caracteres'
+    err.name = '*maximum 25 characters'
   
    } else if(input.name.length == 0) {
-    err.name = '*nombre requerido'
+    err.name = '*name required'
    }
   
     
     if(input.email.length == 0 ) {
-      err.email = '*email requerido'
+      err.email = '*email required'
     } else if (!regex.test(input.email)) {
-        err.email = '*email invalido'
+        err.email = '*invalid email'
     } 
   
     if(input.password.length == 0 ) {
-      err.password = '*contraseña requerida'
+      err.password = '*password required'
     } else if (input.password.length < 8 || input.password.length > 25) {
-      err.password = '*minimo 8 y maximo 25 caracteres'
+      err.password = '*minimum 8 and maximum 25 characters'
     } 
     
-    if(input.confirmPassword !== input.password) {
+    if(input.confirmPassword.length == 0 ) {
+      err.confirmPassword = '*password required'
+    }  else if(input.confirmPassword !== input.password) {
       
-      err.confirmPassword = '*la contraseña no coincide con la de arriba'
+      err.confirmPassword = '*the password does not match the one above'
     } 
 
    return err

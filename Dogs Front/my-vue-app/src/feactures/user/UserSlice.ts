@@ -1,6 +1,6 @@
 import { DogApi, DogSlice } from "../dog/DogSlice";
 import { createSlice, PayloadAction} from "@reduxjs/toolkit";
-import { commentType } from "../../Pages/DogDetail/Comment/Comment";
+
 export interface getUserData {
    
         _id: string
@@ -12,6 +12,9 @@ export interface getUserData {
         email_confirmed : boolean
       
 }
+
+
+
 interface Register {
     name : string,
     email : string,
@@ -59,6 +62,10 @@ export interface allUser {
     comments: Array<string>
     __v: number
 }
+
+export interface userForCommentMath extends allUser {
+    favorite : string[]
+}
 export interface commentPost {
     user : string,
     comment : string, 
@@ -71,6 +78,16 @@ export interface updatingComment {
     user : string
     comment: string;
     like: number;
+    exits: boolean;
+}
+
+export interface CommentResponse {
+    _id: string | undefined;
+    dog: string;
+    user : userForCommentMath
+    comment: string;
+    like: number;
+
     exits: boolean;
 }
 
@@ -99,7 +116,12 @@ export interface userCommentId {
     exits: boolean,
     __v: number
 }
-
+export interface responsePostLike {
+    _id? : string,
+    
+    comment : string
+    likeUser : string,
+}
 const UserQuery = DogSlice.injectEndpoints({
     
 
@@ -141,7 +163,7 @@ const UserQuery = DogSlice.injectEndpoints({
             providesTags : ['User']
         }),
 
-        fetchComments : builder.query<updatingComment[] , string | undefined>({
+        fetchComments : builder.query<CommentResponse[] , string | undefined>({
             query : (id) => `/comments/${id}` ,
             providesTags: ['Comment'],
             
@@ -180,7 +202,7 @@ const UserQuery = DogSlice.injectEndpoints({
 
         fetchUpdateUser : builder.mutation<getUserData , getUserData>({
             query : (data) => ({
-                url : `/user`,
+                url : `/user/update/${data._id}`,
                 method : 'PUT',
                 body : data
             }),
@@ -191,12 +213,39 @@ const UserQuery = DogSlice.injectEndpoints({
             query : (id) => `/favorite/${id}` ,
             providesTags : ['Favorite']
         }),
+          
 
+        fetchFavoriteUserFullProperty : builder.query<DogApi[], string>({
+            query : (id) => `/favorite/user/${id}` ,
+            providesTags : ['Favorite']
+        }),
         fetchCommentId : builder.query<userCommentId[]  , string>({
             query : (id) => `/comment/user/${id}`
+        }),
+
+        fetchPostLike : builder.mutation<responsePostLike, responsePostLike>({
+            query : (data) => ({
+                url : `/post/like`,
+                method : 'POST',
+                body : data
+            }),
+            invalidatesTags : ['Like']
+        }),
+        fetchGetLike : builder.query<responsePostLike[], null>({
+            query : () =>  `/like`,
+            providesTags : ['Like']
+        }),
+
+        fetchRemoveLike : builder.mutation<responsePostLike , string>({
+            query : (id) => ({
+                url : `/like/delete/${id}`,
+                method : 'DELETE',
+               
+            }),
+            invalidatesTags : ['Like']
         })
         
-
+         
         
     })
 })
@@ -236,7 +285,12 @@ export const {useFetchRegisterUserMutation,
     useFetchRegisterMutation,
     useFetchUpdateUserMutation,
     useFetchFavoriteUserQuery,
-    useFetchCommentIdQuery
+    useFetchFavoriteUserFullPropertyQuery,
+    useFetchCommentIdQuery,
+    useFetchPostLikeMutation,
+    useFetchGetLikeQuery,
+    useFetchRemoveLikeMutation
+
 } = UserQuery
 
 

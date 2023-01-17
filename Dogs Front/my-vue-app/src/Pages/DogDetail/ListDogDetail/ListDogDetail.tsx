@@ -18,27 +18,27 @@ const ListDogDetail = ({dog} : Props) => {
     <List sx={{ width: '100%', maxWidth: 360 }}>
     <ListItem>
       <ListItemAvatar>
-        <Avatar>
-          <HeartBrokenIcon/>
-        </Avatar>
+        <Avatar sx={{width: 65 , height: 65}}>
+          <HeartBrokenIcon fontSize='large'/>
+        </Avatar >
       </ListItemAvatar>
-      <ListItemText primary="Life span" secondary={`lives approximately ${dog?.life_span}`} />
+      <ListItemText sx={{marginLeft: '20px'}} primary="Life span" secondary={`lives approximately ${dog?.life_span}`} />
     </ListItem>
     <ListItem>
       <ListItemAvatar>
-        <Avatar>
-          <HorizontalRuleIcon  />
+        <Avatar sx={{width: 65 , height: 65}}>
+          <HorizontalRuleIcon  fontSize='large' />
         </Avatar>
       </ListItemAvatar>
-      <ListItemText primary="Weight" secondary={ `an approximate weight of ${dog?.weight} cm`}/>
+      <ListItemText sx={{marginLeft: '20px'}}  primary="Weight" secondary={ `an approximate weight of ${dog?.weight} cm`}/>
     </ListItem>
     <ListItem>
       <ListItemAvatar>
-        <Avatar>
-        <HeightIcon/>
+        <Avatar sx={{width: 65 , height: 65}}>
+        <HeightIcon fontSize='large'/>
         </Avatar>
       </ListItemAvatar>
-      <ListItemText primary="Height" secondary={ `an approximate height of ${dog?.height} cm`} />
+      <ListItemText sx={{marginLeft: '20px'}}  primary="Height" secondary={ `an approximate height of ${dog?.height} cm`} />
     </ListItem>
 
 

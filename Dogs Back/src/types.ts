@@ -56,7 +56,7 @@ export interface commentPost {
 }
 
 export interface userDataPut {
-  _id : string
+ 
   email_confirmed : boolean
   email : string 
   image : string

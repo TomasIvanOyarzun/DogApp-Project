@@ -54,7 +54,7 @@ const theme = createTheme({
 
 const  MyPagination = () => {
   const options = useAppSelector(state => state.dogReducer.fetchDog)
-    const {data} = useFetchDogsQuery(options)
+    const {data, } = useFetchDogsQuery(options)
     const dispatch = useAppDispatch()
  
     const handleOnChange = (event: React.ChangeEvent<unknown>, pages: number) => {

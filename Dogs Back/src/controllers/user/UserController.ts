@@ -8,7 +8,7 @@ import { DogModel } from "../../models/Dog";
 
 export const registerUser = async (req : Request , res : Response, next : NextFunction) => {
     const  {name , email , password} : userRegister = req.body
-      console.log(req.body)
+  
     const user = await UserModel.findOne({email})
    
        if(user) {
@@ -157,13 +157,13 @@ export const authenticateUser = async (req : Request , res : Response, next : Ne
 
  export const getUpdateUser = async (req: Request, res: Response , next : NextFunction) => {
 
-     const {_id , userName, favorite }   = req.body as userDataPut
-      
+     const { userName, favorite }   = req.body as userDataPut
+      const { id} = req.params
   try {
 
      
     
-      const user = await UserModel.findByIdAndUpdate(_id , 
+      const user = await UserModel.findByIdAndUpdate(id , 
         { $set: {...req.body, name : userName,  favorite } },
         { new: true })
        
@@ -185,8 +185,10 @@ export const getFavoriteUser = async (req: Request, res: Response , next : NextF
    
    
      const user = await UserModel.findById(req.params.id)
-                         
+    
+                          
      res.status(200).json(user?.favorite)
+    
   } catch (error) {
   
    next(error)
@@ -209,7 +211,7 @@ try {
                         .populate('favorite')
                         .exec(); 
 
-   res.status(200).json(user)
+   res.status(200).json(user?.favorite)
 } catch (error) {
 
  next(error)

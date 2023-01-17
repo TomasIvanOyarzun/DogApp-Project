@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
 import {Grid} from '@mui/material'
+import { useWidthScreen } from '../../../hooks/customHooks';
 const images = [
     {
       url: 'https://ichef.bbci.co.uk/news/976/cpsprodpb/17638/production/_124800859_gettyimages-817514614.jpg',
@@ -54,7 +55,7 @@ const images = [
   
   const ImageButton = styled(ButtonBase)(({ theme }) => ({
     position: 'relative',
-    height: 150,
+    height: 200,
     [theme.breakpoints.down('sm')]: {
       width: '100% !important', // Overrides inline-style
       height: 100,
@@ -118,7 +119,9 @@ const images = [
 
   
 const ImageList = () => {
+  const {width } = useWidthScreen()
   return (
+    <Box  sx={{width : width > 1200 ? '100%' : '100%', height: '100%'}} >
     <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%' }}>
       {images.map((image) => (
         
@@ -151,6 +154,7 @@ const ImageList = () => {
         
       ))}
     </Box>
+      </Box>
   )
 }
 

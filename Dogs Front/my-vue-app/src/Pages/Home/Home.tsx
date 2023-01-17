@@ -10,9 +10,11 @@ import { useAppSelector } from '../../hooks/toolkitHooks';
 import { Container } from '@mui/system';
 import { Box } from '@mui/material';
 import IconDog from './IconDog';
+import { getUserData } from '../../feactures/user/UserSlice';
 const Home = () => {
   const page = useAppSelector(state => state.dogReducer.fetchDog)
     const {data} = useFetchDogsQuery(page)
+    const user : getUserData = JSON.parse(localStorage.getItem('user') as string)
   return (
     <Box width='100%' sx={{backgroundColor: '#FFFF'}} >
      <Container>
@@ -31,7 +33,7 @@ const Home = () => {
     {data?.docs && <MyPagination/>}
 
     </Container>
-    <IconDog/>
+    {user && <IconDog/>}
     </Box>
   )
 }

@@ -11,33 +11,39 @@ import Temperament from './Temperament/Temperament';
 import SizeDogHeigth from './SizeDog/SizeDogHeight';
 import SizeDogWeight from './SizeDog/SizeDogWeight';
 import CheckBox from './CheckBoxOrder/CheckBox';
+import ButtonResetFilter from './ButtonReset/ButtonResetFilter';
 
 const Filter = () => {
      const options = useAppSelector(state => state.dogReducer.fetchDog)
      console.log(options)
   return (
-    <Box display='flex' flexDirection='column' p={2} bgcolor='#fff'  border='1px solid #10C408' borderRadius='4px'  >
+    <Box display='flex' flexDirection='column' p={2} bgcolor='#fff'  borderRadius='4px'  >
         
-       <Typography gutterBottom variant="h5" component="div">
+       <Typography gutterBottom variant="h4" color='#64BE43' fontWeight='700' component="div">
        filters and sorts
        </Typography>
        <Divider/>
        <Temperament/>
        <Divider/>
-       <Typography gutterBottom variant="h5" component="div">
+       <Typography color='#464646' gutterBottom variant="h6" component="div">
           Size
        </Typography>
-       <Typography gutterBottom variant="h6" component="div">
+       <Typography color='#464646' gutterBottom  component="div">
           Height
        </Typography>
         <SizeDogHeigth/>
 
-        <Typography gutterBottom variant="h6" component="div">
+        <Typography color='#464646' gutterBottom  component="div">
           Weight
        </Typography>
         <SizeDogWeight/>
         <Divider/>
+        <Typography color='#464646' gutterBottom variant="h6" component="div">
+          Order
+       </Typography>
         <CheckBox/>
+        <Divider/>
+         <ButtonResetFilter/>
        
     </Box>
   )

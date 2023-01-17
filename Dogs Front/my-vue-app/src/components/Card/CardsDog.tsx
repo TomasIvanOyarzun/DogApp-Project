@@ -8,15 +8,17 @@ import Spinner from '../Spinner/Spinner'
 const CardsDog = () => {
      const page = useAppSelector(state => state.dogReducer.fetchDog)
    
-    const {data, isLoading} = useFetchDogsQuery(page)
-    console.log(data?.docs)
+    const {data, isError} = useFetchDogsQuery(page)
+
   return (
   
     <Box flex={8} p={2} >
         
         <Grid container    >
       
-         {isLoading ? <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '300px'}}><Spinner/></Box> : 
+         {isError ? <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '300px'}}>
+          <Spinner/>
+          </Box> : 
           data?.docs.map(el => (
             <Grid xs={12} md={6} lg={4} p={2}   display='flex' justifyContent='center'  >
            

@@ -9,7 +9,7 @@ const IconDog = () => {
     const [open , setOpen] = React.useState(false)
     const [y] = usePositionY()
     const {width} = useWidthScreen()
-    console.log(y)
+  
 
     const displayNone = y > 3180 ? 'none' : 'flex'
     const display = y < 490 ? 'flex' : 'none'
@@ -20,8 +20,8 @@ const IconDog = () => {
   return (
     <>
     {<FormDog open={open} setOpen={setOpen}/>}
-    <Fab onClick={handleOnClick} sx={{ display: width < 900 ? displayNone : display,  position : 'fixed' , bottom : '10%', right: '2%' }} color="primary" aria-label="add">
-        <AddIcon />
+    <Fab onClick={handleOnClick} sx={{ display: width < 900 ? displayNone : display,  position : 'fixed' , bottom : '10%', right: '2%' , bgcolor: '#64BE43'}} color="primary" aria-label="add">
+        <AddIcon  />
       </Fab>
       </>
   )

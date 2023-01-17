@@ -25,26 +25,27 @@ const SizeDogWeight = () => {
     const [number , setNumber] = React.useState(0)
     const disptach = useAppDispatch()
     const options = useAppSelector(state => state.dogReducer.fetchDog)
-    const handleOnChange = (e : Event , value : number) => {
-         setNumber(value)
+    const handleOnChange = (e : Event , value : number | number[] ,activeThumb: number) => {
+         setNumber(typeof value === 'number' ? value : 0)
          disptach(filterOptions({
           ...options,
            weight : value.toString()
          }))
     }
 
-    console.log(number)
+   
   return (
     <Box >
     <Slider
       aria-label="Custom marks"
-      defaultValue={0}
+      defaultValue={Number(options.weight)}
+      value={Number(options.weight)}
       getAriaValueText={valuetext}
       step={1}
-      sx={{color : 'green'}}
+      sx={{color : '#64BE43'}}
       valueLabelDisplay="auto"
       marks={marks}
-      onChange={ handleOnChange}
+      onChange={handleOnChange}
       
     />
   </Box>

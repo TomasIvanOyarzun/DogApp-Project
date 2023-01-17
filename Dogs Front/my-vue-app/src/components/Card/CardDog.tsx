@@ -1,6 +1,6 @@
 import React from 'react';
 import { DogApi } from '../../feactures/dog/DogSlice'
-import { styled } from '@mui/material/styles';
+
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -22,6 +22,9 @@ import { Checkbox, FormControlLabel } from '@mui/material';
 import { getUserData, useFetchAuthenticateUserMutation, useFetchDataUserQuery, useFetchFavoriteUserQuery, useFetchUpdateUserMutation } from '../../feactures/user/UserSlice';
 import Favorite from '@mui/icons-material/Favorite';
 import { Zoom } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { useAppSelector } from '../../hooks/toolkitHooks';
+import { useWidthScreen } from '../../hooks/customHooks';
 
 interface Props {
   dog : DogApi
@@ -47,10 +50,10 @@ const CardDog = ({ dog } : Props) => {
   const user : getUserData = JSON.parse(localStorage.getItem('user') as string)
   const {data, isSuccess} = useFetchFavoriteUserQuery(user?._id)
   const [expanded, setExpanded] = React.useState(false);
- 
+  const active = useAppSelector(state => state.user.active)
   const [updateUser] = useFetchUpdateUserMutation()
 
-
+    const {width} = useWidthScreen()
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -80,13 +83,13 @@ const CardDog = ({ dog } : Props) => {
  
 
   
- 
+
 
   return (
     
 
     
-    <Card sx={{ maxWidth: 345, width: 345 , boxShadow : 'rgba(0, 0, 0, 0.15) 0px 2px 8px'}}>
+    <Card sx={{ maxWidth: 345, width: 345  , boxShadow : 'rgba(0, 0, 0, 0.15) 0px 2px 8px'}}>
     
     <CardMedia
       component="img"
@@ -95,7 +98,7 @@ const CardDog = ({ dog } : Props) => {
       alt={dog.name}
       
     /> 
-    <CardContent  sx={{ maxHeight: 75, height: 75 }}>
+    <CardContent  sx={{ maxHeight: 75, height: 65 }}>
     <Typography textAlign='center' fontWeight='600' gutterBottom variant="h6" component="div" color='#666'>
           {dog.name}
         </Typography>
@@ -105,7 +108,7 @@ const CardDog = ({ dog } : Props) => {
      
         
       
-     {user &&  <FormControlLabel checked={isSuccess && data?.includes(dog._id as string)}  value={dog._id} onChange={handleOnClick} control={<Checkbox  color='success'  icon={<FavoriteIcon />} checkedIcon={<FavoriteIcon />} />} label="Favorite" />}
+     { user !== null && <FormControlLabel checked={isSuccess && data?.includes(dog._id as string)}  value={dog._id} onChange={ handleOnClick} control={<Checkbox  icon={<FavoriteIcon />} checkedIcon={<FavoriteIcon sx={{color:'#64BE43'}} />} />} label="Favorite" />}
     
       <ExpandMore
         expand={expanded}
@@ -117,7 +120,7 @@ const CardDog = ({ dog } : Props) => {
       </ExpandMore>
       <Link style={{textDecoration: 'none'}} to={`/dog/${dog._id}`} >
           
-         <Button   sx={{border : 'transparent' , bgcolor: 'transparent', boxShadow: 'none', color: '#5BDA93', fontWeight: 'bold'}} >Show</Button>
+         <Button   sx={{border : 'transparent' , bgcolor: 'transparent', boxShadow: 'none', color: '#64BE43', fontWeight: 'bold'}} >Show</Button>
           
       </Link>
     </CardActions>

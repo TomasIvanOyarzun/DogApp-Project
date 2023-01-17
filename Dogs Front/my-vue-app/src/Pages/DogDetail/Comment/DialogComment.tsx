@@ -5,15 +5,15 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useFetchUpdateCommentMutation } from '../../../feactures/user/UserSlice';
-import { commentType } from './Comment';
+import {  CommentResponse, useFetchUpdateCommentMutation, userForCommentMath } from '../../../feactures/user/UserSlice';
 
+import Divider from '@mui/material/Divider';
 interface Props {
     openDialog : boolean
     setOpenDialog :  React.Dispatch<React.SetStateAction<boolean>>
    
     
-     user : commentType
+     user : CommentResponse
  
 }
 const DialogComment = ({openDialog, setOpenDialog, user} : Props) => {
@@ -28,18 +28,20 @@ const DialogComment = ({openDialog, setOpenDialog, user} : Props) => {
     };
   
     const handleOnClick = (e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      console.log('entre')
+     
         const updatingFix = {
            _id : user._id,
            dog : user.dog,
-           user : user.user,
+           user : user.user?._id,
            comment : user.comment,
            like : user.like,
+      
             exits : false
            
            
            
         }
+       
         updating(updatingFix)
 
         setOpenDialog(false)
@@ -60,8 +62,9 @@ const DialogComment = ({openDialog, setOpenDialog, user} : Props) => {
       Are you sure you want to delete this comment?
       </DialogContentText>
     </DialogContent>
-    <DialogActions>
-      <Button onClick={handleOnClick} variant="contained">Delete</Button>
+     <Divider/>
+    <DialogActions sx={{margin: '10px'}}>
+      <Button onClick={handleOnClick} variant="contained" color='error'>Delete</Button>
       <Button onClick={handleClose} autoFocus>
         Cancel
       </Button>

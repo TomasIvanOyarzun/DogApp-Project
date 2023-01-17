@@ -25,8 +25,8 @@ const SizeDog = () => {
   const disptach = useAppDispatch()
    const [number , setNumber] = useState(0)
    const options = useAppSelector(state => state.dogReducer.fetchDog)
-    const handleOnChange = (e : Event , value : number) => {
-         setNumber(value)
+    const handleOnChange = ( e : Event , value : number | number[] ,activeThumb: number) => {
+         setNumber(typeof value === 'number' ? value : 0)
           disptach(filterOptions({
              ...options,
              height : value.toString()
@@ -38,10 +38,12 @@ const SizeDog = () => {
     <Box >
     <Slider
       aria-label="Custom marks"
-      defaultValue={0}
+      defaultValue={Number(options.height)}
+      value={Number(options.height)}
       getAriaValueText={valuetext}
+     
       step={1}
-      sx={{color : 'green'}}
+      sx={{color : '#64BE43'}}
       valueLabelDisplay="auto"
       marks={marks}
       onChange={ handleOnChange}

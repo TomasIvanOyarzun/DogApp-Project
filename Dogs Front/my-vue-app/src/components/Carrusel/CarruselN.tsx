@@ -19,17 +19,19 @@ const CarruselN = () => {
   return (
     <>
 
-
+<Box  display='flex' width='100%' maxHeight='100vh'>
+        
+       
 
     <Carousel autoPlay={true} infiniteLoop={true} showStatus={false} showThumbs={false} >
            
                 {[dog_one, dog_two].map(el => (<div style={{display: 'flex', height: width > 1600 ? '100vh' : '100%', justifyContent: 'space-between', alignItems: 'center', width: '100%' , backgroundColor: '#a9fb73', backgroundImage: 'linear-gradient(90deg, #a9fb73 0%, #ffffff 94%)'}}>
                     <div style={{ position: 'relative', width: '70%', left: '0%'}}><img   src={el} /></div>
                    { width > 1300 && <div style={{width : '50%'  , top: '30%', marginRight: '30px'}} >
-                         <Typography variant='h1' fontFamily='revert-layer' fontWeight='1000'>Learn all breeds of Dogs</Typography>
-                         <Typography variant='h5' fontFamily='revert-layer' fontWeight='300'>Find the ideal dog for you, get information on all dogs
+                         <Typography color='#464646' variant='h2' fontFamily='revert-layer' fontWeight='1000'>Learn all breeds of Dogs</Typography>
+                         <Typography color='#464646' variant='h5' fontFamily='revert-layer' fontWeight='300'>Find the ideal dog for you, get information on all dogs
                           classified by breed, and more</Typography>
-                         <a style={{listStyle : 'none', textDecoration: 'none'}} href='#welcome'> <Button variant='contained' sx={{width: '20%', height: '50px', backgroundColor: '#8dfd9f', backgroundImage: 'linear-gradient(90deg, #8dfd9f 0%, #05942f 100%)', fontWeight: 'bold'}}>See more</Button></a> 
+                         <a style={{listStyle : 'none', textDecoration: 'none'}} href='#welcome'>  <Button sx={{backgroundColor: '#64BE43', color: '#fff', borderRadius: '2px' , width : width > 710 ? '20%' : '40%' , height: '45px'}}>see more</Button></a> 
 
                     </div>}
                   
@@ -39,7 +41,7 @@ const CarruselN = () => {
                
             </Carousel>
            
-  
+            </Box>
             </> 
     
   )
